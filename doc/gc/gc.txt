@@ -48,3 +48,8 @@
        ParNew + CMS
        ParallelYoung + ParallelOld
        G1GC
+     GC ROOT:
+         虚拟机栈中的引用对象
+         方法区中类静态属性引用的对象
+         方法区中常量引用对象
+         本地方法栈中JNI引用对象
