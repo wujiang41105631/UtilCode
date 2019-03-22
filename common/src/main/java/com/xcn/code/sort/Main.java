@@ -1,9 +1,6 @@
 package com.xcn.code.sort;
 
-import com.xcn.code.sort.algorthm.ChaRuSortAlgorithm;
-import com.xcn.code.sort.algorthm.MaoPaoSortAlgorithm;
-import com.xcn.code.sort.algorthm.SortAlgorithm;
-import com.xcn.code.sort.algorthm.XuanZeSortAlgorithm;
+import com.xcn.code.sort.algorthm.*;
 
 /**
  * @author: xupeng.guo
@@ -28,5 +25,10 @@ public class Main {
         data = new int[]{1, 15, 2, 25, 1, 3, 5, 6, 10};
         SortAlgorithm xuanZeAlgorithm = new XuanZeSortAlgorithm();
         xuanZeAlgorithm.sort(data);
+
+        System.out.println("KuaiSuSortAlgorithm---------------------------------------");
+        data = new int[]{1, 15, 2, 25, 1, 3, 5, 6, 10};
+        SortAlgorithm kuaiSuAlgorithm = new KuaiSuSortAlgorithm();
+        kuaiSuAlgorithm.sort(data);
     }
 }
