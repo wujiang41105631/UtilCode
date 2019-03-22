@@ -30,5 +30,10 @@ public class Main {
         data = new int[]{1, 15, 2, 25, 1, 3, 5, 6, 10};
         SortAlgorithm kuaiSuAlgorithm = new KuaiSuSortAlgorithm();
         kuaiSuAlgorithm.sort(data);
+
+        System.out.println("DuiSortAlgorithm---------------------------------------");
+        data = new int[]{1, 15, 2, 25, 1, 3, 5, 6, 10, 11};
+        SortAlgorithm duiSuAlgorithm = new DuiSortAlgorithm();
+        duiSuAlgorithm.sort(data);
     }
 }

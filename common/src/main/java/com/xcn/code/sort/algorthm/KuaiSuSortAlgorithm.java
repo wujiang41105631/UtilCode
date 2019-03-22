@@ -1,8 +1,8 @@
 package com.xcn.code.sort.algorthm;
 
-import java.util.Arrays;
-
 /**
+ * 快速排序
+ * https://blog.csdn.net/adusts/article/details/80882649
  * @author: xupeng.guo
  * @date: 2019/3/22
  * @description
