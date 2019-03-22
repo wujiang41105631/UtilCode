@@ -13,11 +13,11 @@ public class MaoPaoSortAlgorithm extends AbstractSortAlgorithm {
     @Override
     protected int[] process(int[] datas) {
         int temp = 0;
-        for (int i = 0; i < datas.length; i++) {
-            for (int k = i + 1; k < datas.length; k++) {
-                if (datas[i] > datas[k]) {
-                    temp = datas[i];
-                    datas[i] = datas[k];
+        for (int i = 0; i < datas.length-1; i++) {
+            for (int k = 0; k < datas.length - i - 1; k++) {
+                if (datas[k] > datas[k + 1]) {
+                    temp = datas[k + 1];
+                    datas[k + 1] = datas[k];
                     datas[k] = temp;
                 }
             }
