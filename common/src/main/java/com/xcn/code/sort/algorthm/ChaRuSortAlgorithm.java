@@ -1,5 +1,7 @@
 package com.xcn.code.sort.algorthm;
 
+import com.xcn.code.sort.AbstractSortAlgorithm;
+
 /**
  * 插入排序
  * https://www.cnblogs.com/skywang12345/p/3596881.html

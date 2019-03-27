@@ -1,11 +1,13 @@
 package com.xcn.code.sort.algorthm;
 
+import com.xcn.code.sort.AbstractSortAlgorithm;
+
 /**
  * @author: xupeng.guo
  * @date: 2019/3/21
  * @description
  */
-public class XuanZeSortAlgorithm extends com.xcn.code.sort.algorthm.AbstractSortAlgorithm {
+public class XuanZeSortAlgorithm extends AbstractSortAlgorithm {
     @Override
     protected int[] process(int[] datas) {
         for (int i = 0; i < datas.length; i++) {

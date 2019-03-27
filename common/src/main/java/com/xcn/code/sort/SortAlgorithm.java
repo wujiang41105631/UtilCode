@@ -1,4 +1,4 @@
-package com.xcn.code.sort.algorthm;
+package com.xcn.code.sort;
 
 /**
  * @author: xupeng.guo

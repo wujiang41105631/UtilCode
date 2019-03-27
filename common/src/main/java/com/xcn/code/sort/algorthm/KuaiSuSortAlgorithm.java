@@ -1,5 +1,7 @@
 package com.xcn.code.sort.algorthm;
 
+import com.xcn.code.sort.AbstractSortAlgorithm;
+
 /**
  * 快速排序
  * https://blog.csdn.net/adusts/article/details/80882649
