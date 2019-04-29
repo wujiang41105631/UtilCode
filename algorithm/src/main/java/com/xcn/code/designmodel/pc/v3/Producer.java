@@ -3,7 +3,6 @@ package com.xcn.code.designmodel.pc.v3;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author: xupeng.guo

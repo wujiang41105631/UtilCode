@@ -1,9 +1,6 @@
 package com.xcn.code.sort.algorthm;
 
 import com.xcn.code.sort.SortAlgorithm;
-import com.xcn.code.sort.algorthm.ChaRuSortAlgorithm;
-import com.xcn.code.sort.algorthm.MaoPaoSortAlgorithm;
-import com.xcn.code.sort.algorthm.XuanZeSortAlgorithm;
 
 /**
  * @author: xupeng.guo

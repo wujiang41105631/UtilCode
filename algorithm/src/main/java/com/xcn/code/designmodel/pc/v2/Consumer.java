@@ -1,7 +1,6 @@
 package com.xcn.code.designmodel.pc.v2;
 
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
