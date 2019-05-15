@@ -58,6 +58,15 @@
                 "user_name" : "qux"
             }
         }
+
+        POST /customer/_update/1?pretty
+        {
+          "script" : "ctx._source.age += 5"
+        }
+
+         ---
+         批量插入:
+        POST /{index_name}/_update_by_query
     6> 批量入
         POST _bulk
         {"index":{"_index":"fengjrblog1"}}
@@ -76,3 +85,9 @@
         GET  fengjrblog1/_search
     7> 单个查询
         GET fengjrblog1/_doc/{id}
+    8> 删除
+        DELETE /sinablog/_doc/{id}
+        DELETE /customer?pretty
+es  启动：
+后台启动: ./bin/elasticsearch -d -p pid    -d daemon
+杀进程  pkill -F pid
