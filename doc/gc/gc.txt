@@ -57,5 +57,6 @@
 
    /export/local/jdk1.8/bin/java -Dnop -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djava.library.path=/usr/local/lib -server -Xms2048m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=256m -Djava.awt.headless=true -Dsun.net.client.defaultConnectTimeout=60000 -Dsun.net.client.defaultReadTimeout=60000 -Djmagick.systemclassloader=no -Dnetworkaddress.cache.ttl=31 -Dsun.net.inetaddr.ttl=11 -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -Xloggc:/export/log/batman/gc.log -Djdk.tls.ephemeralDHKeySize=2048 -Djava.endorsed.dirs=/export/local/tomcat7/endorsed -classpath /export/local/tomcat7/bin/bootstrap.jar:/export/local/tomcat7/bin/tomcat-juli.jar -Dcatalina.base=/export/server/batman -Dcatalina.home=/export/local/tomcat7 -Djava.io.tmpdir=/export/server/batman/temp org.apache.catalina.startup.Bootstrap -config /export/server/batman/conf/server.xml start
 
+
 https://blog.csdn.net/qq_28674045/article/details/51743922
 https://me.csdn.net/iteye_13798

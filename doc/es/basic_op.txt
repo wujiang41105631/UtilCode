@@ -1,36 +1,65 @@
 # 创建index
 PUT /fengjrblog1
+{
+    "settings" : {
+        "number_of_shards" : 1,
+        "number_of_replicas" : 2
+    },
+    "mappings" : {
+        "properties" : {
+            "field1" : { "type" : "text" }
+        }
+    }
+}
 
 PUT /customer?pretty
 
 # index添加mapping
 PUT fengjrblog1/_mappings
-
 {
-"properties": {
-"type": {
-"type": "keyword"
-},
-"name": {
-"type": "text"
-},
-"user_name": {
-"type": "keyword"
-},
-"email": {
-"type": "keyword"
-},
-"content": {
-"type": "text"
-},
-"tweeted_at": {
-"type": "date"
-}
-}
+    "dynamic": false,//动态监测 true 新检测到的字段会加入mapping,false 新加入的字段不会创建索引，且不会被索引，这种模式下必须手动创建 strict 如果发现新字段则抛出异常
+    "date_detection": false,// 禁用动态时间类型监测，此时插入的时间类型将被转换为text
+    "dynamic_date_formats": ["MM/dd/yyyy"], // 时间格式自定义
+    "numeric_detection": true, // 数字格式强转，false则将数字转为string
+    "dynamic_templates": [     // 可通过这个来定义mapping中的某些字段的格式
+          {
+            "longs_as_strings": {
+              "match_mapping_type": "string",
+              "match":   "long_*",
+              "unmatch": "*_text",
+              "mapping": {
+                "type": "long"
+              }
+            }
+          }
+        ],
+    "properties": {
+        "content": {
+            "type": "text"
+        },
+        "email": {
+            "type": "keyword"
+        },
+        "name": {
+            "type": "text"
+        },
+        "tweeted_at": {
+            "type": "date"
+        },
+        "type": {
+            "type": "keyword"
+        },
+        "user_name": {
+            "type": "keyword"
+        }
+    }
 }
 
 # 获取刚才添加的mapping
 GET fengjrblog1/_mappings
+# 更改字段名
+alias
+
 
 # 指定ID添加数据
 PUT fengjrblog1/_doc/1
@@ -138,3 +167,5 @@ GET /_cat/health?v
 GET /_cat/nodes?v
 GET /_cat/indices?v
 GET /fengjrblog1/_count
+
+
