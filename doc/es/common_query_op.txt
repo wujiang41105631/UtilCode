@@ -1,0 +1,283 @@
+http://cwiki.apachecn.org/pages/viewpage.action?pageId=4883323
+https://www.cnblogs.com/xing901022/p/4982698.html
+https://blog.csdn.net/xinguimeng/article/details/51657729
+常用词查询
+    这是在没有使用停用词的情况下，为了提高准确性和相关性而提供的一个解决方案
+    该查询会将词组分成高频和低频两组，使用低频查询并计算分数。然后用高频词组查询但不计算分数。
+match查询
+    该查询讲query参数中的值拿出来加以分析，然后构建相应的查询
+
+
+
+    布尔值查匹配查询
+        {
+            "query":{
+                "match":{
+                    "title":{
+                        "query" :"crime and punishment",
+                        "operator":"and"   -- 连接创建布尔条件的运算符默认or
+                        "analyzer" :"",    -- 分析器的名字
+                        "fuzziness":"",    -- 构建模糊查询
+                        "prefix_length",   -- 控制模糊查询的行为
+                        "max_expansions",  -- 同上
+                        "zero_terms_query" -- 指定当所有的词条都被分析器移除时，查询的行为。可以为all或者none。默认none
+                        "cutoff_frequency" -- 将查询分解成两组，一组高频一组低频,值为 [0,1) 或者 和文档总数相关。基于cutoff频率将术语分配给高频组或低频组，其可以被指定为绝对频率（> = 1）或相对频率（0.0..1.0）。 （请记住，文档频率是按照每个分片级别计算的，如博文中所述的相关性已损坏）。
+                        "auto_generate_synonyms_phrase_query"  默认为true
+                    }
+                }
+            }
+        }
+
+
+    match_phrase查询
+        从分析后的文本中构建短语查询
+            {
+            "query":{
+                "mathc_phrase" :{
+                    "title" :{
+                        "query":"crime and punishment",
+                        "slop":"1"                    -- 一个整数值，构建短语时，中间允许的未知词条数。默认为0
+                        "analyzer":""                 -- 分析时用到的分析器
+                    }
+                }
+            }
+        }
+
+
+    match_phrase_prefix查询
+        和上类似，增加了两个参数
+        {
+            "query":{
+                "mathc_phrase" :{
+                    "title" :{
+                        "query":"crime and punish",   -- 允许最后一个字条只做前缀匹配
+                        "slop":"1"                    -- 一个整数值，构建短语时，中间允许的未知词条数。默认为0
+                        "analyzer":""                 -- 分析时用到的分析器
+                        "max_expansitions" :"20"      -- 控制多少前缀将被重写成最后的词条。？？？？？
+                    }
+                }
+            }
+        }
+
+multi_match
+    针对多个字段进行查询
+    {
+        "query" :{
+            "multi_match":{
+                "query":"crime and punishment",
+                "fileds":["title","otitle"], -- "fields" : [ "subject^3", "*message" ]   "*"正则中的"*", ^3 表示 3倍 主题是消息重要性的3倍
+                "use_dis_max":""                  --定义一个布尔值，true时使用析取最大分数查询-默认。false使用不二查询
+                "tie_breaker":""                  -- 在use_dis_max时使用，指定低分数和最高分数之间的平衡
+                 "type":                        -- best_fields：     (默认) 查找与任何字段匹配的文档，使用最佳字段中的权重。 详情参见：best_fields
+                                                -- most_fields：    查找与任何字段匹配的文档，并组合每个字段的权重。详情参见：most_fields.
+                                                -- cross_fields：   使用相同的分析仪处理字段，就像它们是一个大字段。 在任何字段中查找每个字词，详情参见：cross_fields.
+                                                -- phrase：           对每个字段运行match_phrase查询，并合并每个字段的权重，详情参见：phrase and phrase_prefix.
+                                                -- phrase_prefix：对每个字段运行match_phrase_prefix查询，并合并每个字段的权重，详情参见：phrase and phrase_prefix
+            }
+        }
+    }
+
+
+query_String
+    本查询支持全部的lucene语法
+    A{
+        "query":{
+            "query_string":{
+                "query":" title:crime^10 + title:punishment -otitle:cat +author:(+Fyodor +dostoevsky)",
+                "default_field":"title"                    --指定默认的查询字段。默认为all，由index.query.default_field指定
+                "allow_lending_wildcard"                   --指定是否允许通配符作为词条的第一个字符，默认true
+                "default_operator"  :""                    --逻辑运算符or and 默认or
+                "lowercase_extend_terms":""                --查询重写是否把词条变成小写，默认为true，意味重写后的词条讲小写
+                "enable_position_increments":""            --指定查询结果中的位置增量是否打开，默认true
+                "fuzzy_max_expansions":"    "              --使用模糊查询时，此参数指定模糊查询可被扩展到的最大词条数，默认50
+                "fuzzy_prefix_length" :                    --指定生成的模糊查询中的前缀的长度。默认0
+                "fuzzy_min_sim" :                          --此参数指定模糊查询的最小相似度，默认0.5
+                "phrase_slop" :""              --指定参数溢出值，默认0.
+                "analyze_wildcard":""                      --指定是否应该分析通配符查询生成的词条，默认false
+                "auto_generate_phrase_queries":""          --指定是否自动生成短语查询，默认为false。
+                "minimum_should_match" :                   --控制有多少生成Boolean should子句必须与文档词条匹配，才能认为是匹配。
+                                        可以使百分比，也可以是整数值-个
+                "lenient":" "              --格式方面的失败是否忽略。
+            }
+        }
+    }
+    针对多字段的query_string
+            {
+                "query_string":{
+                    "query":""
+                    "fields"[title,otitle]
+                }
+            }
+simple_query_string:
+    查询使用lucene最新查询解析器之一：SImpleQueryParser
+标识符查询
+    仅使用提供的标识符来过滤返回的文档。其针对内部的_uid字段运行，所以不需要启用_id字段
+    {
+        ”query“:{
+            "ids":{
+                "type":"book"
+                "values":["10","11"]
+            }
+        }
+    }
+前缀查询
+    t他们指定字段以给定的前缀开始的文档
+    {
+    ”query":{
+        "prefix":{
+            "title":"cri"
+        }
+    }
+    }
+fuzzy_like_this查询
+    类似more_like_this查询。
+    它查找所有与提供的文本类似的文档，与more不同的是，它利用模糊字符串并选择生成的最佳差分词条
+    {
+        "qury":{
+            "fuzzy_like_this":{
+                "fields":[],
+                "like_text":""
+                "ignore_tf:false        --指定在相似度计算期间，是否忽略词频。
+                "max_query_terms"       --指定生成的查询中能包括的最大查询词条书，默认25
+                "min_similarity"        --指定差分词条应该有的最小相似性。默认0.5
+                "prefix_length"         --指定查分词条的公共前缀长度，默认为0
+                ”boost"
+                "analyzer
+            }
+        }
+    }
+fuzzy_like_this_field查询
+    和上类似，但是只针对单个字段
+fuzzy查询
+    是第三种模糊查询类型，它基于编辑距离算法类匹配文档。很占用CPU
+通配符查询
+    在查询中使用*和?等通配符。
+more_like_this查询
+    {
+        “query":{
+            "more_like_this":{
+                "fields" "[],
+                "like_text":""
+                "min_term_freq" :              --最低词频，低于将忽略
+                "percent_terms_to_match"       --百分比，高于才会被认为是类似的
+                "max_query_terms"              --指定生成的查询中能包括的最大查询词条数，默认25
+                "stop_words"                   --
+                "min_doc_freq"                 --包含我能当的最小数目，低于次数目，该词条将被忽略，默认5
+                "max_doc_freq"
+                "min_word_len"                 --单词的最小长度，低于将被忽略
+                ”boost_terms"
+                "boost"
+                "analyzer"
+
+                }
+        }
+    }
+more_like_this_field查询
+    针对单个字段
+范围查询
+    gte:>=
+    gt: >
+    lte:<=
+    lt:<
+最大分值查询
+    他会生成一个由所有子查询返回的文档组成的并集并将他返回。，这样我们可以控制较低得分的子查询对文档最后得分的影响
+    最后得分的计算：
+        最高分数的子查询的得分之和，奖赏其余子查询的得分之和乘以tie参数的值
+正则表达式查询
+    支持正则
+复合查询
+
+    布尔查询
+        should
+        must
+        filter
+        must_not
+        minimum_should_match:
+    加权查询
+        封装了两个查询，并且降低其中一个查询返回文档的得分。其由三个节点必须定义
+            positive: 包含所返回文档得分不会被改变的查询
+            negative: 得分将被降低
+            negtive_boost 降低negative部分查询得分的加权值
+    constant_score查询
+        其封装了另一个查询或过滤，并为每一个所封装查询返回的文档返回一个常量得分
+    索引查询
+        {
+            "query":{
+                "indices::{
+                    "indices":['library'],--library索引上查询
+                    "query" :{
+                        "term":{
+                            "title":"crime"
+                            }
+                    },
+                    "no_match_query":{--其他索引上查询
+                        "term":{
+                            "user":"crime"
+                        }
+                    }
+                }
+            }
+        }
+term 查询 匹配一个字段的单个词条:
+GET /_search
+{
+    "query": {
+        "term": {
+            "user": {
+                "value": "Kimchy",
+                "boost": 1.0
+            }
+        }
+     }
+
+     -- 多字段精确匹配
+     "terms" : {
+                    "user" : {
+                        "index" : "users",
+                        "id" : "2",
+                        "path" : "followers"
+                    }
+      }
+
+}
+terms 查询 匹配一个字段的多个词条:
+
+term结构化字段查询，匹配一个值，且输入的值不会被分词器分词
+    term查询keyword字段。
+         term不会分词。而keyword字段也不分词。需要完全匹配才可。
+    term查询text字段。
+         term不分词, 而text字段会分词，所以term查询的条件必须是text字段分词后的某一个。如果值完全一样是查不出来的
+match查询keyword字段
+    match会被分词，而keyword不会被分词，match的需要跟keyword的完全匹配可以。
+match查询text字段
+    match分词，text也分词，只要match的分词结果和text的分词结果有相同的就匹配。
+match_phrase 匹配keyword字段。
+    同match必须跟keywork一致才可以。
+match_phrase匹配text字段。
+    match_phrase是分词的，text也是分词的。match_phrase的分词结果必须在text字段分词中都包含，而且顺序必须相同，而且必须都是连续的。
+
+
+function score query
+    定义function去改变doc的score
+dismax query
+    对子查询的结果做union，score沿用子查询score的最大值。这种查询广泛应用于muti-field的查询。具体可以参见后续更新search-in-depth
+boosting query
+boost查询可用于有效地降级匹配给定查询的结果。与bool查询中的“NOT”子句不同，这仍然选择包含不需要的术语的文档，但会降低它们的总体得分
+   GET /_search
+   {
+       "query": {
+           "boosting" : {
+               "positive" : { 正查询
+                   "term" : {
+                       "field1" : "value1"
+                   }
+               },
+               "negative" : { 负查询
+                    "term" : {
+                        "field2" : "value2"
+                   }
+               },
+               "negative_boost" : 0.2
+           }
+       }
+   }
