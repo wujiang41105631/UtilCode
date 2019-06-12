@@ -1,0 +1,106 @@
+1. field dataTypes
+PUT trips
+{
+  "mappings": {
+    "properties": {
+      "distance": {
+        "type": "long"
+      },
+      "route_length_miles": {
+        "type": "alias",
+        "path": "distance"  // route_length_miles 是distance的别名
+      },
+      "transit_mode": {
+        "type": "keyword"
+      },
+      "blob": {
+        "type": "binary" // 二进制
+      },
+  "date": {
+            "type":   "date", // 日期类型
+            "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+          }
+    }
+  }
+}
+取数时
+GET _search
+{
+  "query": {
+    "range" : {
+      "route_length_miles" : {
+        "gte" : 39
+      }
+    }
+  }
+}
+
+
+2. range 范围类型
+integer_range：2位有符号整型数范围。最小值是-231，最大值是231-1。
+float_range：单精度32位IEEE 754浮点值范围。
+long_range：64位有符号整型数范围。最小值是-263，最大值是263-1。
+double_range：双精度64位IEEE 754浮点值范围。
+date_range：以系统纪元经过的无符号64位整数毫秒表示的日期值范围。
+
+PUT range_index
+{
+  "mappings": {
+    "my_type": {
+      "properties": {
+        "expected_attendees": {
+          "type": "integer_range"
+        },
+        "time_frame": {
+          "type": "date_range", #1
+          "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+        }
+      }
+    }
+  }
+}
+
+PUT range_index/my_type/1
+{
+  "expected_attendees" : { #2
+    "gte" : 10,
+    "lte" : 20
+  },
+  "time_frame" : { #3
+    "gte" : "2015-10-31 12:00:00", #4
+    "lte" : "2015-11-01"
+  }
+}
+
+GET range_index/_search
+{
+  "query" : {
+    "term" : {
+      "expected_attendees" : {
+        "value": 12
+      }
+    }
+  }
+}
+结果
+"hits" : [
+      {
+        "_index" : "range_index",
+        "_type" : "_doc",
+        "_id" : "1",
+        "_score" : 1.0,
+        "_source" : {
+          "expected_attendees" : {
+            "gte" : 10, "lte" : 20
+          },
+          "time_frame" : {
+            "gte" : "2015-10-31 12:00:00", "lte" : "2015-11-01"
+          }
+        }
+      }
+    ]
+
+
+
+
+
