@@ -2,10 +2,7 @@ package com.xcn.spring.annotation.web;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,7 +24,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class ControllerAdviceTest {
 
     @ExceptionHandler(value = Exception.class)
-    public ModelAndView exception(Exception exception, WebRequest request){
+    public ModelAndView returnModelAndViewWhenException(Exception exception, WebRequest request){
+        return null;
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    @ResponseBody
+    public Object returnJSONWhenException(Exception exception, WebRequest request){
         return null;
     }
 

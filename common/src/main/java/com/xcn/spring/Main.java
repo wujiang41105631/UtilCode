@@ -46,6 +46,7 @@ public class Main {
 
     private static void iocUseAnnotation() {
         FgHelloWordService service = context.getBean(FgHelloWordService.class);
+        System.out.println(service);
         logger.info("useAnnotation: {}", service.helloWorld("useAnnotation"));
         HelloService helloService = context.getBean(HelloService.class);
         helloService.interceptByAnnotion("tt");
