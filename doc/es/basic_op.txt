@@ -11,6 +11,9 @@ PUT /fengjrblog1
         }
     }
 }
+# 查看索引
+GET /index名/_settings
+GET /_all/_settings
 
 PUT /customer?pretty
 
@@ -83,7 +86,7 @@ POST fengjrblog1/_doc
 GET  fengjrblog1/_search
 
 # 根据ID获取数据
-GET fengjrblog1/_doc/1
+GET fengjrblog1/_doc/{id}
 
 # 根据ID更新
 POST fengjrblog1/_update/1
@@ -92,6 +95,9 @@ POST fengjrblog1/_update/1
 "user_name" : "qux"
 }
 }
+    8> 删除
+        DELETE /sinablog/_doc/{id}
+        DELETE /customer?pretty
 
 # 批量插入
 POST _bulk
