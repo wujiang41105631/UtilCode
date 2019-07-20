@@ -1,9 +1,12 @@
 package com.xcn;
 
+import com.alibaba.dubbo.common.compiler.Compiler;
+import com.alibaba.dubbo.common.extension.ExtensionLoader;
+
 public class Test {
 
     public static void main(String[] args) {
-
-        System.out.println(1);
+        ExtensionLoader<Compiler> extensionLoader = ExtensionLoader.getExtensionLoader(Compiler.class);
+        com.alibaba.dubbo.common.compiler.Compiler compiler = extensionLoader.getAdaptiveExtension();
     }
 }
