@@ -28,6 +28,26 @@
 4. kibana安装[5601 http 端口]
     vi kibana.yml 修改server.host,elasticsearch.url
     启动kibana
+5. 分词器
+    1.功能：拆词，大小写转换等等，对每个词进行标准化。
+    2.包括3部分:
+        1>charactor filter: 分词前做预处理。过滤掉html标签，特殊符号转换等等。
+        2>tokenizer: 分词
+        3>token filter: 对每个词进行标准化
+    3. es 内置分词器
+       1> standard分词器：es默认分词器。她会将词汇单元转换成小写形式，去掉停用此和和标点符号。对中文的采用的方式为单字分割
+       2> simple分词器：首先会通过非字母字符来分割文本字信息。然后将词汇单元统一为小写形式。该分词器会去掉数字类型的字符
+       3> Whitespace分词器：仅仅是去掉空格。对字符没有lowercase化，不支持中文。并且不对生成的词汇单元做其他标准化处理。
+       4> language分词器：特定语言的分词，不支持中文
+6. 分词器安装
+   1> 下载中文分词器的zip包
+   2> 将zip包封装成插件。一般在git上直接有
+   3> 将2的包执行mvn clena install -Dmaven.test.skip=true
+   4> 3会生成一个zip包，将之放到es目录下的plugins/{插件名}下
+   5> 对之进行解压缩。解压缩后文件夹内的所有东西，都cp到 plugins/{插件名} 根目录下
+   6> 验证是否安装成功:es启动日志中会有loaded plugin
+   7> 中文分词器: ik
+
 
 
 
