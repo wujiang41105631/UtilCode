@@ -1,0 +1,16 @@
+1. spring 的扩展
+1> PropertyEditorSupport 集成该类实现自己定义的属性解析器。
+   xml 中添加配置
+    <bean class="org.Springframework.beans.factory.config.CustomEditorConfigurer ">
+      <property name=" customEditors ">
+        <map>
+          <entry key=" java util. Date ">
+            <bean class=" com test.DatePropertyEditor ">
+              <property name=" format " value="yyyy-MM-dd"/>
+            </bean>
+          </entry>
+        </map>
+      </property>
+    </bean>
+2. BeanPostProcessor
+   InitializingBean
