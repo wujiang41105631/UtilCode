@@ -14,3 +14,10 @@
     </bean>
 2. BeanPostProcessor
    InitializingBean
+3. applicationListener
+4. Lifecycle:接口中有start/stop方法。实现此接口后spring 会保证在启动的时候调用其start方法开始声明中期，并在spring关闭的时候调用stop来结束声明周期，通常用来配置后台程序，如MQ进行轮训等等。
+   而AbstractApplicationContext 的初始化中的finishRefresh()正式保证了这一功能的实现
+--------------------------------------------------   -------------------------
+https://sexycoding.iteye.com/blog/1062372
+spring ltw
+Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|autodetect,默认值为autodetect,他会检测META-INF/aop.xml是否存在
