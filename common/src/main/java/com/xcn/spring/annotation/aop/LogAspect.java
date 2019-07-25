@@ -37,4 +37,7 @@ public class LogAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         logger.info("point cut after method :" + signature.getMethod().getName());
     }
+
+//    @AfterReturning
+//    @AfterThrowing
 }

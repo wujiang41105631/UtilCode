@@ -16,6 +16,8 @@
    4> es 跨域访问
        http.cors.enabled :true
        http.cors.allow-login: "*"
+   5> bootstrap.system_call_filter: false //这是在因为操作系统不支持SecComp，而ES5.2.2默认bootstrap.system_call_filter为true进行检测，所以导致检测失败，失败后直接导致ES不能启动。
+   6> bootstrap.mlockall设为true //这个参数的目的是当你无法关闭系统的swap的时候，建议把这个参数设为true。防止在内存不够用的时候，elasticsearch的内存被交换至交换区，导致性能骤降
 3. head 安装
       0.> git 下载head
       1.> 安装grunt npm install -g grunt-cli

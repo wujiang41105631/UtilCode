@@ -20,7 +20,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <lombok.version>1.14.8</lombok.version>
-        <spring.version>5.1.4.RELEASE</spring.version>
+        <spring.version>4.2.3.RELEASE</spring.version>
         <aspectjrt>1.8.5</aspectjrt>
         <servlet.version>3.1.0</servlet.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
