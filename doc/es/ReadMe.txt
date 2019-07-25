@@ -51,9 +51,17 @@
 es  启动：
 后台启动: ./bin/elasticsearch -d -p pid    -d daemon
 杀进程  pkill -F pid
+8. es常用数据类型
+数字型：long ,Integer,short ,byte double ,float
+日期类型: date
+布尔型： boolean
+二进制: binary
+字符串:text： 会进行分词
+字符串:keyword: 不回进行分词
 ----------------------------------------------------------------------------------------
 es 7.0
     1> 去掉了 type
+
 
 
 

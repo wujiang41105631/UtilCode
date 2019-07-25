@@ -88,7 +88,7 @@ GET  fengjrblog1/_search
 # 根据ID获取数据
 GET fengjrblog1/_doc/{id}
 
-# 根据ID更新
+# 根据ID更新,不回覆盖
 POST fengjrblog1/_update/1
 {
 "doc" : {
@@ -101,6 +101,9 @@ POST fengjrblog1/_update/1
 
 # 批量插入
 POST _bulk
+index: 插入 文档如果存在，直接覆盖
+created：插入 文档如果存在，直接抛一场
+delete: 删除
 {"index":{"_index":"fengjrblog1","_id":"10"}}
 {"type":"user5","name":"11Shay5 Banon","user_name":"3kimchy1","email":"3shay@kimchy.com"}
 {"index":{"_index":"fengjrblog1","_id":"11"}}
@@ -166,6 +169,9 @@ POST /fengjrblog1/_update/TvU6Y2oBQ9fsOOXoB3qy
 "user_name":"zhangsan"
 }
 }
+
+批量获取：  _mget
+
 DELETE /sinablog/_doc/user-kimchy
 DELETE /customer?pretty
 GET /_cat/shards
@@ -175,3 +181,5 @@ GET /_cat/indices?v
 GET /fengjrblog1/_count
 
 
+---bulk 批量操作要谨慎 有限制 。行数不要超过5000，大小 5~100M之间
+---es 并发操作时版本控制。内部版本控制_version。外部版本控制version_type=external,使用外部版本控制的时候version的值必须大于es中的值才会存储成功
