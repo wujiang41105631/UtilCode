@@ -30,3 +30,10 @@
 https://sexycoding.iteye.com/blog/1062372
 spring ltw
 Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|autodetect,默认值为autodetect,他会检测META-INF/aop.xml是否存在
+
+
+5. Spring MVC  :
+ 1> ContextLoaderListener 实现了 ServletContextListener(servlet 规范中的)，启动时唤醒，
+ 2> 使用ServletContextListener接口，开发者能够在为客户端骑牛提供服务之前向SevletContext中添加任意的对象。这个对象在ServletContext启动的时候被初始化，然后在ServletContext真个运行期间都是课件的
+ 3> 每一个web应用都有一个 SevletContext 与之关联。SevletContext在应用启动时创建，关闭时被销毁，且在全局范围内有效。类似于全局变量
+ 4》 ServletContextListener中的核心逻辑便是初始化WebApplicationContext实例，并存放至ServletContext中。

@@ -1,0 +1,5 @@
+查看该进程启动的完整命令行: ps eho command -p $PID
+查看该进程启动时候所在的目录: readlink /proc/$PID/cwd
+查看该进程启动时的完整环境变量: strings -f /proc/$PID/environ | cut -f2 -d ' '
+列出该进程所打开的所有文件: lsof -p $PID
+列出该进程所打开的网络连接: netstat -pan | grep $PID
