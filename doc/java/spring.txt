@@ -17,6 +17,8 @@
 3. applicationListener
 4. Lifecycle:接口中有start/stop方法。实现此接口后spring 会保证在启动的时候调用其start方法开始声明中期，并在spring关闭的时候调用stop来结束声明周期，通常用来配置后台程序，如MQ进行轮训等等。
    而AbstractApplicationContext 的初始化中的finishRefresh()正式保证了这一功能的实现
+5. SmartLifecycle 是一个接口。当Spring容器加载所有bean并完成初始化之后，会接着回调实现该接口的类中对应的方法（start()方法）。
+
 --------------------------------------------------   -------------------------
 https://sexycoding.iteye.com/blog/1062372
 spring ltw
@@ -25,6 +27,8 @@ Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|au
 
 5. Spring MVC  :
  1> ContextLoaderListener 实现了 ServletContextListener(servlet 规范中的)，启动时唤醒，
- 2> 使用ServletContextListener接口，开发者能够在为客户端骑牛提供服务之前向SevletContext中添加任意的对象。这个对象在ServletContext启动的时候被初始化，然后在ServletContext真个运行期间都是课件的
+ 2> 使用ServletContextListener接口，开发者能够在为客户端提供服务之前向SevletContext中添加任意的对象。这个对象在ServletContext启动的时候被初始化，然后在ServletContext真个运行期间都是课件的
  3> 每一个web应用都有一个 SevletContext 与之关联。SevletContext在应用启动时创建，关闭时被销毁，且在全局范围内有效。类似于全局变量
  4》 ServletContextListener中的核心逻辑便是初始化WebApplicationContext实例，并存放至ServletContext中。
+ 5> DispatcherServlet 实现了httpSevlet，走init方法启动
+
