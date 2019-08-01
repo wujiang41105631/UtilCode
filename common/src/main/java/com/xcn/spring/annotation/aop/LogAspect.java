@@ -1,10 +1,8 @@
 package com.xcn.spring.annotation.aop;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +28,11 @@ public class LogAspect {
     public void doBefore(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         logger.info("point cut before :" + signature.getMethod().getAnnotation(Action.class).name());
+    }
+
+    @Around("annotationPointCut()")
+    public void doAround(ProceedingJoinPoint point){
+
     }
 
     @After("execution(* com.xcn.spring.annotation.service.HelloService.*ByRule(..))")
