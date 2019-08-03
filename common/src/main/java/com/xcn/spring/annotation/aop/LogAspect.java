@@ -31,7 +31,7 @@ public class LogAspect {
     }
 
     @Around("annotationPointCut()")
-    public void doAround(ProceedingJoinPoint point){
+    public void doAround(ProceedingJoinPoint point) {
 
     }
 
