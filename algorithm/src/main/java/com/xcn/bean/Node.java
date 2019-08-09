@@ -22,6 +22,10 @@ public class Node {
         this.data = data;
     }
 
+    public boolean hasNext() {
+        return nextNode != null;
+    }
+
     @Override
     public String toString() {
         return data;

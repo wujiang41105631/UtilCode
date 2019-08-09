@@ -11,7 +11,7 @@ import com.xcn.bean.Node;
 public class LinkedTableConvert {
 
     public static Node convert(Node node){
-        if(node.getNextNode() == null){
+        if(!node.hasNext()){
             return node;
         }
         Node n1 = convert(node.getNextNode());
