@@ -7,19 +7,24 @@ package com.xcn.code.designmodel.singleton;
  */
 public class SingletonDCL {
 
-    public SingletonDCL(){
+    private SingletonDCL() {
 
     }
 
-    private static class SingleHolder{
+    private static class SingleHolder {
         private static final SingletonDCL ins = new SingletonDCL();
     }
 
     /**
      * 内部类方式获取单例
+     *
      * @return
      */
-    public static SingletonDCL getInstance(){
+    public static SingletonDCL getInstance() {
         return SingleHolder.ins;
+    }
+
+    public static void main(String[] args) {
+
     }
 }

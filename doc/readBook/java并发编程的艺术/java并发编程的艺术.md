@@ -45,7 +45,9 @@
    1. 程序顺序规则: 一个线程中的每个操作,happens-before 于该线程中的任意后续操作.
    2. 监视器锁规则: 对一个锁的解锁,happens-before 于随后这个锁的加锁
    3. volatile变量规则:对一个volatile域的写,happens-before于任意后续对这个volatile域的读
-   4. 传递性 如果A happends-before B,B happends-before C, 则A happends-before  
+   4. 传递性 如果A happends-before B,B happends-before C, 则A happends-before
+   5. start规则: 如果线程A执行操作ThreadB.start(),那么A线程的ThreadB.start()操作happens-before于线程B的任意操作
+   6. join规则: 如果线程A 执行操作ThreadB.join()并成功返回,那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回.  
    两个操作之间具有happens-before 关系,并不意味着前一个操作必须要在后一个操作之前执行.happens-before仅仅要求前一个操作(执行的结果)对后一个操作可见,且前一个操作按顺序排在第二个操作之前.  
    happens-before与JMM的关系如下:
    ![happens-before与JMM的关系](./happens-before.png)
