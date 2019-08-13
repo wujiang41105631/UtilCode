@@ -39,7 +39,7 @@
    java内存屏障类型如下表:  
    ![内存屏障](./memoryBarria.png)  
    StoreLoad Barriers是一个全能型的屏障,他问同时具有其他3个屏障的效果.现代的多处理器大多支持该屏障(其他类型的屏障不一定被所有的处理器支持).执行该屏障开销会很高.因为当前处理器通常要把写缓冲去中的数据全部刷新到内存中.  
-7. happens-before
+7. happens-before(针对多线程)
    定义: 如果一个操作执行的结果需要对另一个操作可见,那么这两个操作之间必须要存在happens-before原则．这两个操作可以是同一个线程或者多线程．
    原则：
    1. 程序顺序规则: 一个线程中的每个操作,happens-before 于该线程中的任意后续操作.
@@ -49,7 +49,7 @@
    两个操作之间具有happens-before 关系,并不意味着前一个操作必须要在后一个操作之前执行.happens-before仅仅要求前一个操作(执行的结果)对后一个操作可见,且前一个操作按顺序排在第二个操作之前.  
    happens-before与JMM的关系如下:
    ![happens-before与JMM的关系](./happens-before.png)
-8. as-if-serial语义  
+8. as-if-serial语义(针对单线程)  
    as-if-serial语义: 不管怎么重排序,程序的执行结果不能被改变.编译器,runtime和处理器都必须遵守as-if-serial语义.         
    为了遵守as-if-serial语义,编译器和处理器不会对存在数据依赖关系的操作做重排序.
 
