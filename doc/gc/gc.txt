@@ -27,6 +27,8 @@
         -XX:+UseCMSCompactAtFullCollection Full GC后，进行一次碎片整理；整理过程是独占的，会引起停顿时间变长
         -XX:+CMSFullGCsBeforeCompaction  设置进行几次Full GC后，进行一次碎片整理
         -XX:ParallelCMSThreads  设定CMS的线程数量（一般情况约等于可用CPU数量） 
+	年轻代的并行收集线程数默认是(ncpus <= 8) ? ncpus : 3 + ((ncpus * 5) / 8)，如果你希望设定这个线程数，可以通过-XX:ParallelGCThreads= N 来调整。
+	CMS默认启动的回收线程数目是  (ParallelGCThreads + 3)/4)
 
    -XX:+UseG1GC	G1 Gargbage Collector 使用G1垃圾回收器[吞吐量优先]
         TLAB(本地线程缓冲区)   PLAB( 晋升本地分配缓冲区)   Collection Sets(CSets)待收集集合   Card Table 卡表  Remembered Sets(RSets)已记忆集合
@@ -39,6 +41,7 @@
         1)、标记阶段，首先初始标记(Initial-Mark),这个阶段是停顿的(Stop the World Event)，并且会触发一次普通Mintor GC。对应GC log:GC pause (young) (inital-mark)
         2)、Root Region Scanning，程序运行过程中会回收survivor区(存活到老年代)，这一过程必须在young GC之前完成。
         3)、Concurrent Marking，在整个堆中进行并发标记(和应用程序并发执行)，此过程可能被young GC中断。在并发标记阶段，若发现区域对象中的所有对象都是垃圾，那个这个区域会被立即回收(图中打X)。同时，并发标记过程中，会计算每个区域的对象活性(区域中存活对象的比例)。使用的是SATB算法。在GC开始时先创建一个对象快照，STAB可以在并发标记时标记所有快照中当时的存活对象。标记过程中新分配的对象也会被标记为存活对象，不会被回收。
+            和应用线程并发执行，并发标记线程在并发标记阶段启动，由参数-XX:ConcGCThreads(默认GC线程数的1/4，即-XX:ParallelGCThreads/4)控制启动数量，每个线程每次只扫描一个分区，从而标记出存活对象图。在这一阶段会处理Previous/Next标记位图，扫描标记对象的引用字段。同时，并发标记线程还会定期检查和处理STAB全局缓冲区列表的记录，更新对象引用信息。参数-XX:+ClassUnloadingWithConcurrentMark会开启一个优化，如果一个类不可达(不是对象不可达)，则在重新标记阶段，这个类就会被直接卸载。所有的标记任务必须在堆满前就完成扫描，如果并发标记耗时很长，那么有可能在并发标记过程中，又经历了几次年轻代收集。如果堆满前没有完成标记任务，则会触发担保机制，经历一次长时间的串行Full GC。
         4)、Remark, 再标记，会有短暂停顿(STW)。再标记阶段是用来收集 并发标记阶段 产生新的垃圾(并发阶段和应用程序一同运行)；G1中采用了比CMS更快的初始快照算法:snapshot-at-the-beginning (SATB)。
         5)、Copy/Clean up，多线程清除失活对象，会有STW。G1将回收区域的存活对象拷贝到新区域，清除Remember Sets，并发清空回收区域并把它返回到空闲区域链表中。
         6)、复制/清除过程后。回收区域的活性对象已经被集中回收到深蓝色和深绿色区域。
@@ -46,6 +49,14 @@
         可以简单记忆为: 初始标记,并发标记,重新标记,筛选清除
 
         唯一和串行垃圾回收器不同的是，并行垃圾回收器是使用多线程来进行垃圾回收工作的。
+      G1的收集模式：
+        YoungGC：收集年轻代里的Region
+        MixGC：年轻代的所有Region+全局并发标记阶段选出的收益高的Region
+        无论是YoungGC还是MixGC都只是并发拷贝的阶段。
+        分代G1模式下选择CSet有两种子模式，分别对应YoungGC和mixedGC：
+        YoungGC：CSet就是所有年轻代里面的Region
+        MixedGC：CSet是所有年轻代里的Region加上在全局并发标记阶段标记出来的收益高的Region
+        G1的运行过程是这样的，会在Young GC和Mix GC之间不断的切换运行，同时定期的做全局并发标记，在实在赶不上回收速度的情况下使用Full GC(Serial GC)。初始标记是搭在YoungGC上执行的，在进行全局并发标记的时候不会做Mix GC，在做Mix GC的时候也不会启动初始标记阶段。当MixGC赶不上对象产生的速度的时候就退化成Full GC，这一点是需要重点调优的地方。
 
      流行的组合
        Serial
