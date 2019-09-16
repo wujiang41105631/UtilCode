@@ -12,7 +12,7 @@ public class SingletonDCL2 {
 
     }
 
-    private volatile static SingletonDCL2 ins = null;
+    private volatile transient static SingletonDCL2 ins = null;
 
     /**
      * DCL方式获取单例
