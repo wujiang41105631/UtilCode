@@ -13,22 +13,53 @@
    -XX:+UseConcMarkSweepGC	CMS Garbage Collector并发标记垃圾回收器 [响应优先]
         CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。目前很大一部分的Java应用都集中在互联网站或B/S系统的服务端上，这类应用尤其重视服务的响应速度，希望系统停顿时间最短，以给用户带来较好的体验。
         从名字（包含“Mark Sweep”）上就可以看出CMS收集器是基于“标记-清除”算法实现的，它的运作过程相对于前面几种收集器来说要更复杂一些，整个过程分为4个步骤，包括：
-        初始标记（CMS initial mark） 初始标记仅仅只是标记一下GC Roots能直接关联到的对象，速度很快
+        初始标记（CMS initial mark） 初始标记仅仅只是标记一下标记老年代中所有存活的对象和GC Roots能直接关联到的对象，速度很快
         并发标记（CMS concurrent mark） 并发标记阶段就是进行GC Roots Tracing的过程  使用的是Incremental update批量更新算法,在增加引用时的写屏障中触发新的对象引用的标记
-        重新标记（CMS remark） 重新标记阶段则是为了修正并发标记期间，因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般会比初始标记阶段稍长一些，但远比并发标记的时间短。
+        -- 并发预清理 此阶段GC线程和应用线程也是并发执行，因为阶段2是与应用线程并发执行，可能有些引用关系已经发生改变。
+                     通过卡片标记(Card Marking)，提前把老年代空间逻辑划分为相等大小的区域(Card)，如果引用关系发生改变，JVM会将发生改变的区域标记位“脏区”(Dirty Card)，然后在本阶段，这些脏区会被找出来，刷新引用关系，清除“脏区”标记
+        -- 并发可取消的预清理(Concurrent Abortable Preclean)
+                   此阶段也不停止应用线程. 本阶段尝试在 STW 的 最终标记阶段(Final Remark)之前尽可能地多做一些工作，以减少应用暂停时间
+                   在该阶段不断循环处理：标记老年代的可达对象、扫描处理Dirty Card区域中的对象，循环的终止条件有：
+                   1 达到循环次数
+                   2 达到循环执行时间阈值
+                   3 新生代内存使用率达到阈值
+
+        最终标记（CMS remark） 目标是完成老年代中所有存活对象的标记。在此阶段执行： 1 遍历新生代对象，重新标记 2 根据GC Roots，重新标记 3 遍历老年代的Dirty Card，重新标记
         并发清除（CMS concurrent sweep）
+        并发重置(Concurrent Reset)
+            此阶段与应用程序并发执行，重置CMS算法相关的内部数据, 为下一次GC循环做准备
         由于整个过程中耗时最长的并发标记和并发清除过程中，收集器线程都可以与用户线程一起工作，所以总体上来说，CMS收集器的内存回收过程是与用户线程一起并发地执行。老年代收集器（新生代使用 ParNew）
 
         优点:并发收集、低停顿
         缺点：产生大量空间碎片、并发阶段会降低吞吐量
 
+        常见问题及优化：
+            1. 最终标记阶段停顿时间过长问题
+            CMS的GC停顿时间约80%都在最终标记阶段(Final Remark)，若该阶段停顿时间过长，常见原因是新生代对老年代的无效引用，在上一阶段的并发可取消预清理阶段中，执行阈值时间内未完成循环，来不及触发Young GC，清理这些无效引用
+            通过添加参数：-XX:+CMSScavengeBeforeRemark。在执行最终操作之前先触发Young GC，从而减少新生代对老年代的无效引用，降低最终标记阶段的停顿，但如果在上个阶段(并发可取消的预清理)已触发Young GC，也会重复触发Young GC
+            2.并发模式失败(concurrent mode failure) & 晋升失败(promotion failed)问题
+                并发模式失败：当CMS在执行回收时，新生代发生垃圾回收，同时老年代又没有足够的空间容纳晋升的对象时，CMS 垃圾回收就会退化成单线程的Full GC。所有的应用线程都会被暂停，老年代中所有的无效对象都被回收
+                晋升失败：当新生代发生垃圾回收，老年代有足够的空间可以容纳晋升的对象，但是由于空闲空间的碎片化，导致晋升失败，此时会触发单线程且带压缩动作的Full GC
+                并发模式失败和晋升失败都会导致长时间的停顿，常见解决思路如下：
+
+                降低触发CMS GC的阈值，即参数-XX:CMSInitiatingOccupancyFraction的值，让CMS GC尽早执行，以保证有足够的空间
+                增加CMS线程数，即参数-XX:ConcGCThreads，
+                增大老年代空间
+                让对象尽量在新生代回收，避免进入老年代
+            3. 内存碎片问题
+               通常CMS的GC过程基于标记清除算法，不带压缩动作，导致越来越多的内存碎片需要压缩，常见以下场景会触发内存碎片压缩：
+                   新生代Young GC出现新生代晋升担保失败(promotion failed)
+                   程序主动执行System.gc()
+               可通过参数CMSFullGCsBeforeCompaction的值，设置多少次Full GC触发一次压缩，默认值为0，代表每次进入Full GC都会触发压缩，带压缩动作的算法为上面提到的单线程Serial Old算法，暂停时间(STW)时间非常长，需要尽可能减少压缩时间
+
+
         -XX:+UseConcMarkSweepGC  使用CMS收集器
 
         -XX:+UseCMSCompactAtFullCollection Full GC后，进行一次碎片整理；整理过程是独占的，会引起停顿时间变长
-        -XX:+CMSFullGCsBeforeCompaction  设置进行几次Full GC后，进行一次碎片整理
+        -XX:+CMSFullGCsBeforeCompaction  设置进行几次Full GC后，进行一次碎片整理m,默认是0
         -XX:ParallelCMSThreads  设定CMS的线程数量（一般情况约等于可用CPU数量） 
-	年轻代的并行收集线程数默认是(ncpus <= 8) ? ncpus : 3 + ((ncpus * 5) / 8)，如果你希望设定这个线程数，可以通过-XX:ParallelGCThreads= N 来调整。
-	CMS默认启动的回收线程数目是  (ParallelGCThreads + 3)/4)
+        年轻代的并行收集线程数默认是(ncpus <= 8) ? ncpus : 3 + ((ncpus * 5) / 8)，如果你希望设定这个线程数，可以通过-XX:ParallelGCThreads= N 来调整。
+        CMS默认启动的回收线程数目是  (ParallelGCThreads + 3)/4)
 
    -XX:+UseG1GC	G1 Gargbage Collector 使用G1垃圾回收器[吞吐量优先]
         TLAB(本地线程缓冲区)   PLAB( 晋升本地分配缓冲区)   Collection Sets(CSets)待收集集合   Card Table 卡表  Remembered Sets(RSets)已记忆集合
