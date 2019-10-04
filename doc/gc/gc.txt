@@ -106,3 +106,6 @@
 
 https://blog.csdn.net/qq_28674045/article/details/51743922
 https://me.csdn.net/iteye_13798
+
+3。 默认 年老代：年轻代 = 1 ：2
+    默认 eden : Survivor0:Survivor1=8:1:1
