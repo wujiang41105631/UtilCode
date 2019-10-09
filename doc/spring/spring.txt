@@ -41,3 +41,12 @@ Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|au
  4》 ServletContextListener中的核心逻辑便是初始化WebApplicationContext实例，并存放至ServletContext中。
  5> DispatcherServlet 实现了httpSevlet，走init方法启动
 
+6. 向spring容器中注入bean 定义
+   1> 通过@Import
+      1>> @Import(value={AAAA.class})直接倒入摸个类
+      2>> 实现 ImportBeanDefinitionRegistrar 类,然后通过@Import引入
+      3>> 实现 ImportSelector 接口
+   2> @CompomentScan @Service @Bean @Controller
+7. FactoryBean作用
+   1> 第三方整合
+   2> 对第三方屏蔽复杂的bean 定义
