@@ -1,4 +1,4 @@
-package com.xcn.provider;
+package com.xcn.simplerpc.provider;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

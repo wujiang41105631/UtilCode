@@ -1,4 +1,4 @@
-package com.xcn.provider;
+package com.xcn.simplerpc.provider;
 
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;

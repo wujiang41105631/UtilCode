@@ -1,4 +1,4 @@
-package com.xcn.consumer;
+package com.xcn.simplerpc.consumer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

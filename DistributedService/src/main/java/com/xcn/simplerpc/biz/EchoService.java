@@ -1,4 +1,4 @@
-package com.xcn.biz;
+package com.xcn.simplerpc.biz;
 
 /**
  * @author: xupeng.guo

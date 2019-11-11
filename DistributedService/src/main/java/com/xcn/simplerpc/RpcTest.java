@@ -1,9 +1,9 @@
-package com.xcn.test;
+package com.xcn.simplerpc;
 
-import com.xcn.biz.EchoService;
-import com.xcn.biz.EchoServiceImpl;
-import com.xcn.consumer.RpcImportor;
-import com.xcn.provider.RpcExportor;
+import com.xcn.simplerpc.biz.EchoService;
+import com.xcn.simplerpc.biz.EchoServiceImpl;
+import com.xcn.simplerpc.consumer.RpcImportor;
+import com.xcn.simplerpc.provider.RpcExportor;
 
 import java.net.InetSocketAddress;
 
