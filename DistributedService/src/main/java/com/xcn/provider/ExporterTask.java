@@ -19,6 +19,12 @@ public class ExporterTask implements Runnable {
     }
 
     @Override
+    /**
+     * 1. 将客户端发送的码流反序列化成对象,反射调用服务实践者,获取执行结果
+     * 2. 对象序列化,通过Socket发送给客户端
+     * 3. 服务调用完成后,释放Socket等链接资源,防止句柄泄漏
+     *
+     */
     public void run() {
         ObjectOutputStream output = null;
         ObjectInputStream input = null;
