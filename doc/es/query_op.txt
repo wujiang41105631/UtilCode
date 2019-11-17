@@ -1,0 +1,83 @@
+1. GET /bank/_search
+   GET /bank/_search
+   {
+       "query": {
+           "match_all": {}
+       },
+       "sort": {
+           "_id": {
+               "order": "desc"
+           }
+       },
+       "_source": [
+           "account_number",
+           "balance"
+       ]
+   }
+   SQL: SELECT account_number,balance FROM bank order by _id desc;
+
+GET /bank/_search
+{
+  "query": { "match": { "account_number": 20 } }
+}  
+SQL: SELECT * FROM bank where account_number = 20;
+
+3. his example returns all accounts containing the term "mill" in the address:
+GET /bank/_search
+{
+  "query": { "match": { "address": "mill" } }
+}
+4. must 多个条件全部匹配
+GET /bank/_search才算
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "address": "mill" } },
+        { "match": { "address": "lane" } }
+      ]
+    }
+  }
+}
+5. should 多个条件中只要有一个为真 就算
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        { "match": { "address": "mill" } },
+        { "match": { "address": "lane" } }
+      ]
+    }
+  }
+}
+6. 不匹配
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "must_not": [
+        { "match": { "address": "mill" } },
+        { "match": { "address": "lane" } }
+      ]
+    }
+  }
+}
+7.  20000 <=balance <= 30000
+GET /bank/_search
+{
+  "query": {
+    "bool": {
+      "must": { "match_all": {} },
+      "filter": {
+        "range": {
+          "balance": {
+            "gte": 20000,
+            "lte": 30000
+          }
+        }
+      }
+    }
+  }
+}
+must: 查询部分 filter 筛选部分
