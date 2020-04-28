@@ -67,4 +67,13 @@ public class CommonUtils {
     public static String decode(String source) throws UnsupportedEncodingException {
         return new String(CompressUtil.decompress(ConvertUtil.base64ToBytes(source)),"UTF-8");
     }
+
+
+    public static void main(String[] args) {
+        try {
+            System.out.println(CommonUtils.decode(""));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,5 +1,17 @@
+#1
 查看该进程启动的完整命令行: ps eho command -p $PID
 查看该进程启动时候所在的目录: readlink /proc/$PID/cwd
 查看该进程启动时的完整环境变量: strings -f /proc/$PID/environ | cut -f2 -d ' '
 列出该进程所打开的所有文件: lsof -p $PID
 列出该进程所打开的网络连接: netstat -pan | grep $PID
+
+########### cpu个数检查
+总逻辑CPU数 = 物理CPU个数 X 每颗物理CPU的核数 X 超线程数
+# 物理CPU个数（我们的服务器是2个）
+cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l
+
+# 查看每个物理CPU中core的个数(就是核数)（6核）
+cat /proc/cpuinfo| grep "cpu cores"| uniq
+
+# 查看逻辑CPU的个数
+cat /proc/cpuinfo| grep "processor"| wc -l
