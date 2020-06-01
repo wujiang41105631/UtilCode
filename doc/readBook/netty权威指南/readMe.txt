@@ -1,3 +1,8 @@
+0. 关于IO的描述解释可以参考
+    https://mp.weixin.qq.com/s?__biz=MzU0MzQ5MDA0Mw==&mid=2247483907&idx=1&sn=3d5e1384a36bd59f5fd14135067af1c2&chksm=fb0be897cc7c61815a6a1c3181f3ba3507b199fd7a8c9025e9d8f67b5e9783bc0f0fe1c73903&scene=21#wechat_redirect
+记住这两点很重要
+    1 等待数据准备 (Waiting for the data to be ready)
+    2 将数据从内核拷贝到进程中 (Copying the data from the kernel to the process)
 1。 根据UNIX网络编程对IO类型的分类，UNIX提供了5种IO模型：
      1> 阻塞I/O模型。
      2> 非阻塞I/O模型。
