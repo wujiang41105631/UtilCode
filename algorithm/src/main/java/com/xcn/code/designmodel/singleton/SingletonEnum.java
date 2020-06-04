@@ -6,9 +6,14 @@ package com.xcn.code.designmodel.singleton;
  * @create: 2020-06-04 15:49
  **/
 public enum SingletonEnum {
+
     INSTANCE;
 
     public void test(){
+
+    }
+
+    private SingletonEnum(){
 
     }
 
