@@ -3,7 +3,7 @@ package com.xcn.code.designmodel.singleton;
 /**
  * @author: xupeng.guo
  * @date: 2019/4/17
- * @description
+ * @description jvm 保证线程安全
  */
 public class SingletonDCL {
 
