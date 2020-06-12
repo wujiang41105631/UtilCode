@@ -158,7 +158,8 @@ java堆最佳化设置。设置多个参数使长时间运行过的任务使用�
 -XX:MaxMetaspaceSize=256m
 
     1
-
+    -XX:PreTenuSizeThreshold
+    eden最大能放的单个的大对象又多大
     -XX:MaxNewSize=size
     新生代最大大小。
     -XX:MaxTenuringThreshold=threshold
