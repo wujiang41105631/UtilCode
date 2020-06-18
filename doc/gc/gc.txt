@@ -30,7 +30,7 @@
                    2 达到循环执行时间阈值
                    3 新生代内存使用率达到阈值
 
-        最终标记（CMS remark） 目标是完成老年代中所有存活对象的标记。在此阶段执行： 1 遍历新生代对象，重新标记 2 根据GC Roots，重新标记 3 遍历老年代的Dirty Card，重新标记
+        -- 最终标记（CMS remark） 目标是完成老年代中所有存活对象的标记。在此阶段执行： 1 遍历新生代对象，重新标记 2 根据GC Roots，重新标记 3 遍历老年代的Dirty Card，重新标记
         并发清除（CMS concurrent sweep）
         并发重置(Concurrent Reset)
             此阶段与应用程序并发执行，重置CMS算法相关的内部数据, 为下一次GC循环做准备
@@ -57,7 +57,7 @@
                    新生代Young GC出现新生代晋升担保失败(promotion failed)
                    程序主动执行System.gc()
                可通过参数CMSFullGCsBeforeCompaction的值，设置多少次Full GC触发一次压缩，默认值为0，代表每次进入Full GC都会触发压缩，带压缩动作的算法为上面提到的单线程Serial Old算法，暂停时间(STW)时间非常长，需要尽可能减少压缩时间
-
+               当碎片化超级严重的时候会退化成serial old
 
         -XX:+UseConcMarkSweepGC  使用CMS收集器
 
@@ -68,6 +68,7 @@
         CMS默认启动的回收线程数目是  (ParallelGCThreads + 3)/4)
 
    -XX:+UseG1GC	G1 Gargbage Collector 使用G1垃圾回收器[吞吐量优先]
+        G1 逻辑分代，不是物理分代
         TLAB(本地线程缓冲区)   PLAB( 晋升本地分配缓冲区)   Collection Sets(CSets)待收集集合   Card Table 卡表  Remembered Sets(RSets)已记忆集合
         G1是目前技术发展的最前沿成果之一，HotSpot开发团队赋予它的使命是未来可以替换掉JDK1.5中发布的CMS收集器。与CMS收集器相比G1收集器有以下特点：
         (1). 空间整合，G1收集器采用标记整理算法，不会产生内存空间碎片。分配大对象时不会因为无法找到连续空间而提前触发下一次GC。
@@ -101,11 +102,24 @@
        ParallelYoung + ParallelOld
        G1GC
 
+并发标记的算法：
+    1> 三色标记【三色扫描算法】：黑白灰三色，并发标记时，引用可能产生变化，白色对象有可能被标记回收
+        1>> 黑色：表示自己遍历到了，自己的孩子也遍历到了
+        2>> 灰色：表示自己遍历到了，孩子没有遍历到
+        3>> 白色：表示自己没遍历，孩子没遍历
+    2> cms 在并发标记的时候，用的是基于三色标记算法的Incremental update 增量标记
+    3> g1 在并发标记的时候，用的是基于三色标记算法的STAB
+    4> zgc 用的是colored pointers,颜色指针
 
 
    /export/local/jdk1.8/bin/java -Dnop -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djava.library.path=/usr/local/lib -server -Xms2048m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=256m -Djava.awt.headless=true -Dsun.net.client.defaultConnectTimeout=60000 -Dsun.net.client.defaultReadTimeout=60000 -Djmagick.systemclassloader=no -Dnetworkaddress.cache.ttl=31 -Dsun.net.inetaddr.ttl=11 -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -Xloggc:/export/log/batman/gc.log -Djdk.tls.ephemeralDHKeySize=2048 -Djava.endorsed.dirs=/export/local/tomcat7/endorsed -classpath /export/local/tomcat7/bin/bootstrap.jar:/export/local/tomcat7/bin/tomcat-juli.jar -Dcatalina.base=/export/server/batman -Dcatalina.home=/export/local/tomcat7 -Djava.io.tmpdir=/export/server/batman/temp org.apache.catalina.startup.Bootstrap -config /export/server/batman/conf/server.xml start
 
-
+jvm 简单设置：
+    -XX:+PrintGCDateStamps
+    -XX:+PrintGCDetails
+    -XX:+PrintHeapAtGC
+    -Xloggc:/export/log/batman/batman-gc-%t.log
+    -XX:+HeapDumpOnOutOfMemoryError
 https://blog.csdn.net/qq_28674045/article/details/51743922
 https://me.csdn.net/iteye_13798
 

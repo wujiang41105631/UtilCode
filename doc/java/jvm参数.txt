@@ -162,7 +162,7 @@ java堆最佳化设置。设置多个参数使长时间运行过的任务使用�
     eden最大能放的单个的大对象又多大
     -XX:MaxNewSize=size
     新生代最大大小。
-    -XX:MaxTenuringThreshold=threshold
+    -XX:MaxTenuringThreshold=threshold [cms 默认是6，其他都是15]
     在新生代中对象存活次数(经过Minor GC的次数)后仍然存活，就会晋升到旧生代。
     -XX:MetaspaceSize=size
     设置类元空间大小。
@@ -204,8 +204,7 @@ java堆最佳化设置。设置多个参数使长时间运行过的任务使用�
     幸存代的比例。
     -XX:TargetSurvivorRatio=percent
     年轻代收集后，幸存代期望的比例值。
-    -XX:TLABSize=size
-    设置本地线程收集缓冲区的初始化大小。
+
     -XX:+UseAdaptiveSizePolicy
     使用自适应分代大小。
     -XX:+UseConcMarkSweepGC
@@ -224,8 +223,14 @@ java堆最佳化设置。设置多个参数使长时间运行过的任务使用�
     使用 Serial垃圾回收器。
     -XX:+UseStringDeduplication
     使用字符串去重机制。
+
+
     -XX:+UseTLAB
     年轻代中使用本地线程收集块
+    -XX:TLABWasteTargetPercent
+    设置TLAB空间所占用Eden空间的百分比大小
+    -XX:TLABSize=size
+    设置本地线程收集缓冲区的初始化大小。
 
 --------------------------------------------------------------------------------
     java高分局之JVM命令参数大全（高级运行时选项）
@@ -353,7 +358,11 @@ java堆最佳化设置。设置多个参数使长时间运行过的任务使用�
     jstat -class file:////hsperfdata_
     jstat -gc file:////hsperfdata_
     - -XX:+PrintCommandLineFlags
-    输出JVM设置的选项和值，比如：堆大小、垃圾回收器等。默认这个选项是关闭的。
+    输出JVM默认设置的选项和值，比如：堆大小、垃圾回收器等。默认这个选项是关闭的。
+    - -XX:+PrintFlagsFinal
+    输出最终的参数
+    - -XX:+PrintFlagsInitial
+    初始化的XX参数
     - -XX:+PrintNMTStatistics
     如果-XX:NativeMemoryTracking选项开启，那么这个选项会在JVM退出的时候打印本地内存的收集数据。默认这个选项是关闭的。
     - -XX:+RelaxAccessControlCheck
