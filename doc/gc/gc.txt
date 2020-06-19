@@ -107,9 +107,9 @@
         1>> 黑色：表示自己遍历到了，自己的孩子也遍历到了
         2>> 灰色：表示自己遍历到了，孩子没有遍历到
         3>> 白色：表示自己没遍历，孩子没遍历
-    2> cms 在并发标记的时候，用的是基于三色标记算法的Incremental update 增量标记
-    3> g1 在并发标记的时候，用的是基于三色标记算法的STAB
-    4> zgc 用的是colored pointers,颜色指针
+    2> cms 在并发标记的时候，用的是基于三色标记算法的Incremental update 增量标记，为了解决漏标误标的问题，用的写屏障
+    3> g1 在并发标记的时候，用的是基于三色标记算法的STAB，snapshot at the beginning， 用的写屏障
+    4> zgc 用的是colored pointers,颜色指针。主要用的读屏障。最大支持16T
 
 
    /export/local/jdk1.8/bin/java -Dnop -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Djava.library.path=/usr/local/lib -server -Xms2048m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=256m -Djava.awt.headless=true -Dsun.net.client.defaultConnectTimeout=60000 -Dsun.net.client.defaultReadTimeout=60000 -Djmagick.systemclassloader=no -Dnetworkaddress.cache.ttl=31 -Dsun.net.inetaddr.ttl=11 -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -Xloggc:/export/log/batman/gc.log -Djdk.tls.ephemeralDHKeySize=2048 -Djava.endorsed.dirs=/export/local/tomcat7/endorsed -classpath /export/local/tomcat7/bin/bootstrap.jar:/export/local/tomcat7/bin/tomcat-juli.jar -Dcatalina.base=/export/server/batman -Dcatalina.home=/export/local/tomcat7 -Djava.io.tmpdir=/export/server/batman/temp org.apache.catalina.startup.Bootstrap -config /export/server/batman/conf/server.xml start

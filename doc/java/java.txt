@@ -1,0 +1,23 @@
+1. java 对象布局[64位机器]
+    [通过 hotsport 的jol工具可以看到]
+  1> 普通对象：
+     markword [8字节]
+     class pointer [4字节]
+     实例数据
+     对齐[padding] 对象必须是8的整数倍，如果不足，就补齐，如果关掉UseCompressedClassPointers，则classPointer会占8个字节
+  2> 数组对象：
+      markword [8字节]
+      class pointer [4字节]
+      数组长度[4字节]
+      实例数据
+      对齐[padding] 对象必须是8的整数倍，如果不足，就补齐
+2。在java启动时，可以加启动参数:
+        -XX:+UseCompressedClassPointers 是否启用压缩类指针,默认开启
+        -XX:+UseCompressedOops 使用压缩普通对象指针,默认开启
+3。mark word包括什么？
+    1> identity hash code
+    2> gc 信息
+    3> 锁的信息[]
+4. 对象头
+    markword
+    class pointer
