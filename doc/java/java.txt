@@ -17,9 +17,9 @@
         -XX:+UseCompressedClassPointers 是否启用压缩类指针,默认开启
         -XX:+UseCompressedOops 使用压缩普通对象指针,默认开启
 3。mark word包括什么？
-    1> identity hash code
-    2> gc 信息 [分代]
-    3> 锁的信息[]
+    1> identity hash code 31位
+    2> gc 信息 [分代] 4位
+    3> 锁的信息[] 2位 + 1位偏向锁
 4. 对象头
     markword
     class pointer
