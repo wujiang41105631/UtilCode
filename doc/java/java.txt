@@ -2,7 +2,7 @@
     [通过 hotsport 的jol工具可以看到]
   1> 普通对象：
      markword [8字节]
-     class pointer [4字节]
+     class pointer [4字节] 指向类元信息(在方法区)
      对齐[padding] 对象必须是8的整数倍，如果不足，就补齐，如果关掉UseCompressedClassPointers，则classPointer会占8个字节
      -- 以上3个被称为对象头
      实例数据
