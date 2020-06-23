@@ -1,0 +1,6 @@
+1. 锁粗化，锁消除
+2. synchronized实现：
+    1。java编码：+synchrnoized
+    2. 汇编层级：monitorenter,monitorexit
+    3. 锁自动升级
+    4. lock comxchg
