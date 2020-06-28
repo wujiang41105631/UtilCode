@@ -1,9 +1,0 @@
-锁的概念：
-    1。 互斥
-    2。 可重入
-    3。 阻塞
-    4。 谁用谁删
-redis分布式锁如何做：
-1。 互斥，redis 通过setNx设置
-2。 谁加锁，谁删除。redis， setNx的value 设置个uuid,删除时直接判断value是不是自己的，如果是再删。
-3。 设置超时： jedis.setByte(); 或者通过Redission 去玩

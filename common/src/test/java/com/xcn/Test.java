@@ -3,6 +3,8 @@ package com.xcn;
 import com.alibaba.dubbo.common.compiler.Compiler;
 import com.alibaba.dubbo.common.extension.ExtensionLoader;
 
+import java.util.concurrent.TimeUnit;
+
 public class Test {
 
     public static void main(String[] args) {

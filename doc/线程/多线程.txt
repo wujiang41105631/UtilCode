@@ -15,7 +15,15 @@
 4。 超线程：
         一个ALU对应多个PC|registers
     cache line 缓存行：64字节
-
+5,  线程池状态
+       RUNNING:  Accept new tasks and process queued tasks
+       SHUTDOWN: Don't accept new tasks, but process queued tasks
+       STOP:     Don't accept new tasks, don't process queued tasks,
+                    and interrupt in-progress tasks
+       TIDYING:  /All tasks have terminated, workerCount is zero,
+                   the thread transitioning to state TIDYING
+                    will run the terminated() hook method
+       TERMINATED: terminated() has completed
 
 
 
