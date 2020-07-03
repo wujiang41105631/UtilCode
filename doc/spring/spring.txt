@@ -71,4 +71,5 @@ Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|au
    5> AbstractAutowireCapableBeanFactory.populateBean：主要处理 InstantiationAwareBeanPostProcessor.postProcessAfterInstantiation，和1> 调用的方法不一样。作用，判断是否要注入属性，如果返回true，则可能进入自动装配
    6> AbstractAutowireCapableBeanFactory.populateBean：主要处理 InstantiationAwareBeanPostProcessor.postProcessPropertyValues， 自动装配
    7> AbstractAutowireCapableBeanFactory.initializeBean.applyBeanPostProcessorsBeforeInitialization主要处理：BeanPostProcess.postProcessBeforeInitialization： 生命周期回调之前调用，即@PostConstructor之前
-   8> AbstractAutowireCapableBeanFactory.initializeBean.applyBeanPostProcessorsBeforeInitialization主要处理：BeanPostProcess.postProcessAfterInitialization 销毁？？？？？
+   8> AbstractAutowireCapableBeanFactory.initializeBean.applyBeanPostProcessorsAfterInitialization 主要处理：BeanPostProcess.postProcessAfterInitialization 生成Aop
+       (public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport implements SmartInstantiationAwareBeanPostProcessor, BeanFactoryAware 他做了aop的代理，主要是wrapIfNecessary方法)
