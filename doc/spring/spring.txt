@@ -50,3 +50,25 @@ Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|au
 7. FactoryBean作用
    1> 第三方整合
    2> 对第三方屏蔽复杂的bean 定义
+8. spring 循环依赖问题：
+    1> 单例模式默认支持循环依赖.
+    2> 如何关闭？ AbstractAutowireCapableBeanFactory.allowCircularReferences 循环注入
+    3> 原理： 3级缓存处理(3个map)。
+            1. 是spring上下文，singletonObjects
+            2。singletonFactories 工厂，用来增强对象的创建过程【会对一堆BeanPostProcessor做调用】
+            3. earlySingletonObjects【1.性能问题，2。防止重复创建】
+9. @Autowired和@Resource有啥区别？
+    Spring 后置处理器不一样
+    spring不但支持自己定义的@Autowired注解，还支持几个由JSR-250规范定义的注解，它们分别是@Resource、@PostConstruct以及@PreDestroy。
+    　　@Resource的作用相当于@Autowired，只不过@Autowired按byType自动注入，而@Resource默认按 byName自动注入罢了
+10 spring容器是啥？
+    3个map + beanDefination + BeanPostProcessor
+11.spring 的后置处理器，在启动的时候有8个地方
+   1> AbstractAutowireCapableBeanFactory.createBean#resolveBeforeInstantiation: 主要处理 InstantiationAwareBeanPostProcessor.postProcessBeforeInstantiation
+   2> AbstractAutowireCapableBeanFactory.createBeanInstance#determineConstructorsFromBeanPostProcessors：主要处理 SmartInstantiationAwareBeanPostProcessor，作用，由后置处理器返回那些构造方法
+   3> AbstractAutowireCapableBeanFactory.doCreateBean#applyMergedBeanDefinitionPostProcessors：主要处理 MergedBeanDefinitionPostProcessor，作用，合并bean的缓存bean的配置信息
+   4> AbstractAutowireCapableBeanFactory.doCreateBean#getEarlyBeanReference：主要处理 SmartInstantiationAwareBeanPostProcessor.getEarlyBeanReference， 和1> 调用的方法不一样。作用，合并bean的缓存bean的配置信息。解决循环引用
+   5> AbstractAutowireCapableBeanFactory.populateBean：主要处理 InstantiationAwareBeanPostProcessor.postProcessAfterInstantiation，和1> 调用的方法不一样。作用，判断是否要注入属性，如果返回true，则可能进入自动装配
+   6> AbstractAutowireCapableBeanFactory.populateBean：主要处理 InstantiationAwareBeanPostProcessor.postProcessPropertyValues， 自动装配
+   7> AbstractAutowireCapableBeanFactory.initializeBean.applyBeanPostProcessorsBeforeInitialization主要处理：BeanPostProcess.postProcessBeforeInitialization： 生命周期回调之前调用，即@PostConstructor之前
+   8> AbstractAutowireCapableBeanFactory.initializeBean.applyBeanPostProcessorsBeforeInitialization主要处理：BeanPostProcess.postProcessAfterInitialization 销毁？？？？？
