@@ -1,0 +1,12 @@
+1. spring事务的定义：
+    1> TransactionDefinition: 事务的定义：定义了事务的传播行为，隔离级别
+    2> TransactionAttribute 继承自 TransactionDefinition，扩展了2个方法
+    3> public interface PlatformTransactionManager {
+           TransactionStatus getTransaction(TransactionDefinition var1) throws TransactionException;
+           void commit(TransactionStatus var1) throws TransactionException;
+           void rollback(TransactionStatus var1) throws TransactionException;
+       }
+    4> TransactionStatus
+    5> TransactionInterceptor -> invokeWithinTransaction
+
+    6> AnnotationTransactionAspect
