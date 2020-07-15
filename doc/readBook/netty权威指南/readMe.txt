@@ -6,7 +6,7 @@
 1。 根据UNIX网络编程对IO类型的分类，UNIX提供了5种IO模型：
      1> 阻塞I/O模型。
      2> 非阻塞I/O模型。
-     3> I/O复用模型
+     3> I/O复用模型      select/epoll的好处就在于单个process就可以同时处理多个网络连接的IO。它的基本原理就是select/epoll这个function会不断的轮询所负责的所有socket，当某个socket有数据到达了，就通知用户进程
      4> 信号驱动I/O模型
      5> 异步I/O
      如图所示

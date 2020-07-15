@@ -79,7 +79,9 @@
            5）否则，查找类是否在自己的Fragment Bundle中，如果在，则委派给Fragment Bundle的类加载器加载。
            6）否则，查找Dynamic Import列表的Bundle，委派给对应Bundle的类加载器加载。
            7）否则，类加载器失败。
-
+    6. 全盘委托
+        解决先用谁去加载类的问题？
+        是利用当前方法（或者当前类）的类加载器来作为优先的类加载器
 
 
 2. java 引用
@@ -90,3 +92,5 @@
 3。 java 和dubbo的spi
     1> java spi 不能单独获取某个实现类
     2> java spi 没有实现ioc 和aop
+4.  AQS:
+    1。 单个线程->线程交替执行的话其实和队列无关
