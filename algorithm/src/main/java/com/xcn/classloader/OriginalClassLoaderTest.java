@@ -19,18 +19,17 @@ public class OriginalClassLoaderTest {
         System.out.println(OriginalClassLoaderTest.class.getClassLoader().getParent().getParent());// 返回null,表明是已经到BOOT了
     }
 
-    public static String[] getClassLoaderLoadingPath(String property) {
-        String bootClassLoaderLodingPath = System.getProperty(property);
-        return bootClassLoaderLodingPath.split(":");
-
-    }
-
     public static void printClassLoaderLodingPath(ClassLoaderEnum classLoaderEnum) {
         String[] classLoaderLoadingPath = getClassLoaderLoadingPath(classLoaderEnum.path);
         for (String s : classLoaderLoadingPath) {
             System.out.println("[由" + classLoaderEnum.desc + "加载] " + s);
         }
         System.out.println();
+    }
+
+    public static String[] getClassLoaderLoadingPath(String property) {
+        String bootClassLoaderLodingPath = System.getProperty(property);
+        return bootClassLoaderLodingPath.split(":");
     }
 
     enum ClassLoaderEnum {

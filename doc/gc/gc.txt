@@ -96,6 +96,8 @@
         MixedGC：CSet是所有年轻代里的Region加上在全局并发标记阶段标记出来的收益高的Region
         G1的运行过程是这样的，会在Young GC和Mix GC之间不断的切换运行，同时定期的做全局并发标记，在实在赶不上回收速度的情况下使用Full GC(Serial GC)。初始标记是搭在YoungGC上执行的，在进行全局并发标记的时候不会做Mix GC，在做Mix GC的时候也不会启动初始标记阶段。当MixGC赶不上对象产生的速度的时候就退化成Full GC，这一点是需要重点调优的地方。
 
+
+
      流行的组合
        Serial
        ParNew + CMS

@@ -1,7 +1,7 @@
 # REDIS
   据淘汰策略： 
-1. volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰 
-2. volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选马上将要过期的数据淘汰 
+1. volatile-lru[Least Recently Used]：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰 
+2. volatile-ttl[Time To Live]：从已设置过期时间的数据集（server.db[i].expires）中挑选马上将要过期的数据淘汰 
 3. volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰 
 4. allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰 
 5. allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰 

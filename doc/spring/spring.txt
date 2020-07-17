@@ -45,7 +45,7 @@ Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|au
    1> 通过@Import
       1>> @Import(value={AAAA.class})直接倒入摸个类
       2>> 实现 ImportBeanDefinitionRegistrar 类,然后通过@Import引入
-      3>> 实现 ImportSelector 接口
+      3>> 实现 ImportSelector 接口。,然后通过@Import引入
    2> @CompomentScan @Service @Bean @Controller
 7. FactoryBean作用
    1> 第三方整合

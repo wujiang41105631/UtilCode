@@ -1,28 +1,30 @@
 1. java 对象布局[64位机器]
     [通过 hotsport 的jol工具可以看到]
   1> 普通对象：
-     markword [8字节]
-     class pointer [4字节] 指向类元信息(在方法区)
+     对象头 [12 Byte]
      对齐[padding] 对象必须是8的整数倍，如果不足，就补齐，如果关掉UseCompressedClassPointers，则classPointer会占8个字节
-     -- 以上3个被称为对象头
      实例数据
   2> 数组对象：
       markword [8字节]
       class pointer [4字节]
       数组长度[4字节]
       对齐[padding] 对象必须是8的整数倍，如果不足，就补齐
-      -- 以上3个被称为对象头
       实例数据
-2。在java启动时，可以加启动参数:
-        -XX:+UseCompressedClassPointers 是否启用压缩类指针,默认开启
-        -XX:+UseCompressedOops 使用压缩普通对象指针,默认开启
-3。mark word包括什么？
+2. 对象头 [12 Byte]    【windows 都是小端存储，mac可能是大端存储】
+    1> markword [8个字节]
+    2> klass pointer [4个字节]   【如果指针压缩没有开启的话，占用8字节】
+        大端模式，是指数据的高字节保存在内存的低地址中，而数据的低字节保存在内存的高地址中，这样的存储模式有点儿类似于把数据当作字符串顺序处理：地址由小向大增加，而数据从高位往低位放；这和我们的阅读习惯一致。
+        小端模式，是指数据的高字节保存在内存的高地址中，而数据的低字节保存在内存的低地址中，这种存储模式将地址的高低和数据位权有效地结合起来，高地址部分权值高，低地址部分权值低。
+3 。mark word包括什么？
     1> identity hash code 31位
     2> gc 信息 [分代] 4位
-    3> 锁的信息[] 2位 + 1位偏向锁
-4. 对象头
-    markword
-    class pointer
+    3> 锁的信息[] 2位
+    4> 1位偏向锁
+
+4。在java启动时，可以加启动参数:
+        -XX:+UseCompressedClassPointers 是否启用压缩类指针,默认开启
+        -XX:+UseCompressedOops 使用压缩普通对象指针,默认开启
+
 
 5. classLoader
     1> 类型
@@ -94,3 +96,5 @@
     2> java spi 没有实现ioc 和aop
 4.  AQS:
     1。 单个线程->线程交替执行的话其实和队列无关
+5. 内存逃逸：
+    数组长度不要超过64，可以通过-XX:EliminateAllocationArraySizeLimit=n来进行控制，n是数组的大小。来控制
