@@ -17,10 +17,10 @@
     
     
     Write-Ahead Logging 简称WAL
-    A 原子性 wal
+    A 原子性 wal undolog
     C 一致性 wal  一致性是指系统从一个正确的状态,迁移到另一个正确的状态
     I 隔离型 锁
-    D 持久性 wal
+    D 持久性 wal  redolog
 
 3. 事务的隔离级别   
    1> 读未提交  
