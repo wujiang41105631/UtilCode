@@ -98,3 +98,5 @@
     1。 单个线程->线程交替执行的话其实和队列无关
 5. 内存逃逸：
     数组长度不要超过64，可以通过-XX:EliminateAllocationArraySizeLimit=n来进行控制，n是数组的大小。来控制
+6. 并发队列：
+    ConcurrentLinkedQueue： 无锁队列，采用cas 实现，并发量适中的情况下可以用
