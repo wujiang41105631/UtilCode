@@ -17,18 +17,18 @@ public class MaoPaoSortAlgorithm extends AbstractSortAlgorithm {
         int temp = 0;
         for (int i = 0; i < datas.length - 1; i++) {
             // 由于有了swapFlag 所以最优时间复杂度为O(n)
-            boolean swapFlag = false;
+//            boolean swapFlag = false;
             for (int k = 0; k < datas.length - i - 1; k++) {
                 if (datas[k] > datas[k + 1]) {
                     temp = datas[k + 1];
                     datas[k + 1] = datas[k];
                     datas[k] = temp;
-                    swapFlag = true;
+//                    swapFlag = true;
                 }
             }
-            if (swapFlag) {
-                return datas;
-            }
+//            if (swapFlag) {
+//                return datas;
+//            }
         }
         return datas;
     }
