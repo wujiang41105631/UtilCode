@@ -1,4 +1,4 @@
-package com.xcn.classloader;
+package com.xcn.util;
 
 /**
  * @author: xupeng.guo
