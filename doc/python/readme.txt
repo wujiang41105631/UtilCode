@@ -189,6 +189,7 @@ python是交互式的解释器。
           (42,)
         函数tuple的工作原理与list很像:它将一个序列作为参数，并将其转换为元组 。如果参数已经是元组，就原封不动地返回它。
 3. 字符串
-        >>> format = "Hello, %s. %s enough for ya?" >>> values = ('world', 'Hot')
+        >>> format = "Hello, %s. %s enough for ya?"
+        >>> values = ('world', 'Hot')
         >>> format % values
         'Hello, world. Hot enough for ya?'

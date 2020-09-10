@@ -13,36 +13,29 @@ public class ChaRuSortAlgorithm extends AbstractSortAlgorithm {
 
 
     /**
-     * 直接插入排序
-     * <p>
-     * 参数说明：
-     * a -- 待排序的数组
-     * n -- 数组的长度
+     * 插入排序不是通过交换位置而是通过比较找到合适的位置插入元素来达到排序的目的的。
+     * 相信大家都有过打扑克牌的经历，特别是牌数较大的。在分牌时可能要整理自己的牌，牌多的时候怎么整理呢？
+     * 就是拿到一张牌，找到一个合适的位置插入。这个原理其实和插入排序是一样的。
+     * 举个栗子，对5,3,8,6,4这个无序序列进行简单插入排序，首先假设第一个数的位置时正确的，想一下在拿到第一张牌的时候，
+     * 没必要整理。然后3要插到5前面，把5后移一位，变成3,5,8,6,4.想一下整理牌的时候应该也是这样吧。
+     * 然后8不用动，6插在8前面，8后移一位，4插在5前面，从5开始都向后移一位。
+     * 注意在插入一个数的时候要保证这个数前面的数已经有序。简单插入排序的时间复杂度也是O(n^2)。
+     * @param arr
+     * @return
      */
     @Override
-    protected int[] process(int[] datas) {
-        int i, j, k;
-        int n = datas.length;
-        for (i = 1; i < n; i++) {
-            //为a[i]在前面的a[0...i-1]有序区间中找一个合适的位置
-            for (j = i - 1; j >= 0; j--) {
-                if (datas[j] < datas[i]) {
-                    break;
+    protected int[] process(int[] arr) {
+            int t;
+            for (int i = 1; i < arr.length; i++) {
+                int j = i - 1;
+                t = arr[i];
+                while (j >= 0 && t < arr[j]) {
+                    arr[j + 1] = arr[j];
+                    j--;
                 }
-
+                arr[j + 1] = t;
             }
-            //如找到了一个合适的位置
-            if (j != i - 1) {
-                //将比a[i]大的数据向后移
-                int temp = datas[i];
-                for (k = i - 1; k > j; k--) {
-                    datas[k + 1] = datas[k];
-                }
-                //将a[i]放到正确位置上
-                datas[k + 1] = temp;
-            }
-        }
-        return datas;
+        return arr;
     }
 
 //    @Override

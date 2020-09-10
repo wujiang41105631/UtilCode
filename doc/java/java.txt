@@ -100,3 +100,6 @@
     数组长度不要超过64，可以通过-XX:EliminateAllocationArraySizeLimit=n来进行控制，n是数组的大小。来控制
 6. 并发队列：
     ConcurrentLinkedQueue： 无锁队列，采用cas 实现，并发量适中的情况下可以用
+7. 轻量锁 升级 成重量锁
+    1。 等待线程数 超过cpu 核数的一半
+    2。 自悬次数超过N的时候，jdk 1.6开始自适应了
