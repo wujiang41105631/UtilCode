@@ -1,0 +1,67 @@
+1. G1 内部细节
+    1> 无需回收整个堆，而是选择一个Collection set(cs).
+    2> 2种gc， Full yong gc 和 mixed gc
+         Full yong gc:
+             stw(疏散 Pause)
+                1，构建CS (eden+survivor)
+                2. 扫描gc root
+                3. update rs 清空dirty card queue
+                4. Process rs 找到哪些被年老带对象引用
+                5。Object copy
+                6. reference processing
+            -- 以上6步都走完后，G1记录每个阶段的时间，用于自动调优，
+            -- 记录Eden/survivor数量和GC时间
+                   根据暂停目标(调优参数，是个时间)自动调整region数量
+                   暂停目标越短，eden数量 越少【吞吐量少了】
+                   -XX:+PrintAdaptiveSizePolicy // 自适应的尺寸调节策略
+                   -XX:+PrintTenuringDistribution // 打印资深提升的分布
+          Old GC:
+                标记是并发进行的。
+                用三色标记算法。
+                    黑：GC ROOT
+                    白：初始状态
+                    灰 : GC ROOT 指向的对象，灰色对象入队列。然后从队列里面把灰色的变成 黑的。
+                    会有Object lost.
+                流程：
+                    STW:
+                        piggy-backed on yong gc
+                        利用yong gc 的信息。
+                    恢复应用线程。
+                    并发初始标记
+                    STW
+                        remark
+                            STAB/Refrence processing
+                        clean up:
+                            立刻回收全空的区
+                    恢复应用线程
+          MIX GC：
+
+
+
+
+
+    3> 估计每个region种的垃圾比例，优先回收垃圾多的region
+2. 问题：
+     跨代引用
+     不同的region之间存在相互引用。
+3。问题解决
+     remember set(rs): 记住那个region引用本region的内存
+        指向card table中对应的entity
+        可找到具体内存区域
+     cart table
+        table中的每个entry覆盖512Byte的空间
+        当对应的内存空间发生改变时，标记为dirty
+            write barrier
+                1. jvm 注入代码，记录引用指针变化
+                2.更新指针时，
+                    标记card 为dirty
+                    将card 计入 dirty card queue，队列有白/绿/黄/红 4种颜色，
+                        白表示状态更新很慢，
+                        绿色（-XX:G1ConRefinementGreenZone = N） Refinement线程被激活，开始更新RS
+                        黄色（-XX:G1ConRefinementYellowZone = N） 所有的 Refinement线程被激活，排空queue;
+                        红色（-XX:G1ConRefinementRedZone = N） 应用线程也才遇到排空队列的工作
+
+
+     空间换时间
+         用额外的空间维护引用信息
+         5%~10% memory overhead
