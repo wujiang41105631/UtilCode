@@ -67,6 +67,28 @@
         年轻代的并行收集线程数默认是(ncpus <= 8) ? ncpus : 3 + ((ncpus * 5) / 8)，如果你希望设定这个线程数，可以通过-XX:ParallelGCThreads= N 来调整。
         CMS默认启动的回收线程数目是  (ParallelGCThreads + 3)/4)
 
+         -server
+           -Xmx6g
+           -Xms4g
+           -XX:SurvivorRatio=8
+           -XX:NewRatio=4
+           -XX:PermSize=256m
+           -XX:MaxPermSize=512m
+           -XX:+HeapDumpOnOutOfMemoryError
+           -XX:+DisableExplicitGC
+           -XX:+PrintGCDetails
+           -XX:+PrintGCTimeStamps
+           -XX:+PrintCommandLineFlags
+           -XX:+UseConcMarkSweepGC
+           -XX:+UseParNewGC
+           -XX:ParallelCMSThreads=4
+           -XX:+CMSClassUnloadingEnabled
+           -XX:+UseCMSCompactAtFullCollection
+           -XX:CMSFullGCsBeforeCompaction=1
+           -XX:CMSInitiatingOccupancyFraction=72
+
+
+
    -XX:+UseG1GC	G1 Gargbage Collector 使用G1垃圾回收器[吞吐量优先]
         G1 逻辑分代，不是物理分代
         TLAB(本地线程缓冲区)   PLAB( 晋升本地分配缓冲区)   Collection Sets(CSets)待收集集合   Card Table 卡表  Remembered Sets(RSets)已记忆集合
