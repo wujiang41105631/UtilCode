@@ -81,11 +81,11 @@
            -XX:+PrintCommandLineFlags
            -XX:+UseConcMarkSweepGC
            -XX:+UseParNewGC
-           -XX:ParallelCMSThreads=4
+           -XX:ParallelCMSThreads=4  // 设定CMS的线程数量，cpu数量
            -XX:+CMSClassUnloadingEnabled
-           -XX:+UseCMSCompactAtFullCollection
-           -XX:CMSFullGCsBeforeCompaction=1
-           -XX:CMSInitiatingOccupancyFraction=72
+           -XX:+UseCMSCompactAtFullCollection. // 开启对年老带的压缩
+           -XX:CMSFullGCsBeforeCompaction=1.   //设置进行1次Full GC后，进行一次碎片整理
+           -XX:CMSInitiatingOccupancyFraction=72 // 是指设定CMS在对内存占用率达到72%的时候开始GC(因为CMS会有浮动垃圾,所以一般都较早启动GC);
 
 
 
