@@ -59,3 +59,24 @@ AOF持久化配置
 appendfsync always     #每次有数据修改发生时都会写入AOF文件。
 appendfsync everysec  #每秒钟同步一次，该策略为AOF的缺省策略。
 appendfsync no          #从不同步。高效但是数据不会被持久化。
+
+5. redis io模型
+    redis采用的是多路复用IO模型，单执行线程，多IO线程。然后采用epoll来实现。
+    epoll有诸多优点：
+     1. epoll 没有最大并发连接的限制，上限是最大可以打开文件的数目，这个数字一般远大于 2048, 
+     一般来说这个数目和系统内存关系很大，具体数目可以 cat /proc/sys/fs/file-max 察看。
+     2. 效率提升， Epoll 最大的优点就在于它
+     只管你“活跃”的连接 ，而跟连接总数无关，因此在实际的网络环境中，Epoll 的效率就会远远高于 select 和 poll 。
+     3. 内存拷贝， Epoll 在这点上使用了“共享内存”，这个内存拷贝也省略了。
+     
+     selet，poll，epoll 区别：
+         select：它维护了一个数组结构 fd_set，调用 select 函数时，会从用户空间拷贝 fd_set 到内核空间，并监听是否有事件触发，有就通过无差别轮询的方式遍历找到事件触发的位置，然后执行相关的读或写操作。轮询的时间复杂度为 O(n)。
+         缺点：内核对被监控的 fd_set 集合做了大小限制，最大为 1024 ；每次调用 select，都需要把 fd_set 集合从用户态拷贝到内核态，都需要在内核遍历 传递进来的所有 fd_set ，效率很低。
+         poll：与 select 类似，区别是它采用的是 poll_fd 数据结构实现了一个可变长的数组，没有了最大文件描述符数量的限制。
+         epoll：epoll 与 select 的不同之处在于，epoll 监听事件是否触发时，还设置了回调函数，如果事件触发，就执行回调函数，并将准备就绪的 fd 放到 readyList 中，而不需要轮询遍历所有的 fd_set 。并且 epoll 没有最大文件描述符数量的限制。在高并发情况下 epoll 能支持更多的连接。
+     
+     详见https://blog.csdn.net/dl674756321/article/details/105411034?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.channel_param
+         https://blog.csdn.net/wxy941011/article/details/80274233?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param
+
+
+
