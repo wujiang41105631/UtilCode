@@ -29,7 +29,7 @@ public class RpcImportor<S> {
      */
     public S importor(final Class<?> serviceService, final InetSocketAddress addr) {
         // 使用动态代理完成此步骤
-        return (S) Proxy.newProxyInstance(serviceService.get()
+        return (S) Proxy.newProxyInstance(serviceService.getClassLoader()
                 , new Class<?>[]{serviceService.getInterfaces()[0]}
                 , new InvocationHandler() {
                     @Override
