@@ -60,7 +60,7 @@ public class Kmp {
             if (ms[i - 1] == ms[cn]) {
                 next[i++] = ++cn;
             } else if (cn > 0) {
-                //
+                // 类似于一个小的kmp
                 cn = next[cn];
             } else {
                 next[i++] = 0;
