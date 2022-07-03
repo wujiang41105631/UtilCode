@@ -60,6 +60,7 @@ public class Kmp {
             if (ms[i - 1] == ms[cn]) {
                 next[i++] = ++cn;
             } else if (cn > 0) {
+                //
                 cn = next[cn];
             } else {
                 next[i++] = 0;
