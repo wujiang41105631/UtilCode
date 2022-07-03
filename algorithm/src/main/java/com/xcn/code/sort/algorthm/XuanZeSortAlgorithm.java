@@ -24,17 +24,29 @@ public class XuanZeSortAlgorithm extends AbstractSortAlgorithm {
      */
     @Override
     protected int[] process(int[] datas) {
-        for (int i = 0; i < datas.length; i++) {
-            int offset = i;
-            for (int k = offset + 1; k < datas.length; k++) {
-                if (datas[offset] > datas[k]) {
-                    offset = k;
-                }
-            }
-            if (offset != i) {
-                int minvalue = datas[offset];
-                datas[offset] = datas[i];
-                datas[i] = minvalue;
+//        for (int i = 0; i < datas.length; i++) {
+//            int offset = i;
+//            for (int k = offset + 1; k < datas.length; k++) {
+//                if (datas[offset] > datas[k]) {
+//                    offset = k;
+//                }
+//            }
+//            if (offset != i) {
+//                int minvalue = datas[offset];
+//                datas[offset] = datas[i];
+//                datas[i] = minvalue;
+//            }
+//        }
+//        return datas;
+        return doProcess(datas);
+    }
+
+    private int[] doProcess(int[] datas) {
+        for (int i = 0; i < datas.length-1; i++) {
+            for(int j = i+1;j>0 && datas[j]<datas[j-1];j--){
+                int t = datas[j];
+                datas[j] = datas[j - 1];
+                datas[j-1] = t;
             }
         }
         return datas;

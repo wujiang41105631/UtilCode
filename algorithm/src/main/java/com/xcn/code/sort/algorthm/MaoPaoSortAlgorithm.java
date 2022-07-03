@@ -24,21 +24,35 @@ public class MaoPaoSortAlgorithm extends AbstractSortAlgorithm {
      */
     @Override
     protected int[] process(int[] datas) {
-        int temp = 0;
-        for (int i = 0; i < datas.length - 1; i++) {
-            // 由于有了swapFlag 所以 最优时间复杂度为O(n)
-//            boolean swapFlag = false;
-            for (int k = 0; k < datas.length - i - 1; k++) {
-                if (datas[k] > datas[k + 1]) {
-                    temp = datas[k + 1];
-                    datas[k + 1] = datas[k];
-                    datas[k] = temp;
-//                    swapFlag = true;
+//        int temp = 0;
+//        for (int i = 0; i < datas.length - 1; i++) {
+//            // 由于有了swapFlag 所以 最优时间复杂度为O(n)
+////            boolean swapFlag = false;
+//            for (int k = 0; k < datas.length - i - 1; k++) {
+//                if (datas[k] > datas[k + 1]) {
+//                    temp = datas[k + 1];
+//                    datas[k + 1] = datas[k];
+//                    datas[k] = temp;
+////                    swapFlag = true;
+//                }
+//            }
+////            if (swapFlag) {
+////                return datas;
+////            }
+//        }
+
+        return doProcess(datas);
+    }
+
+    private int[] doProcess(int[] datas) {
+        for(int i = 0; i < datas.length; i++){
+            for(int j = 0; j< datas.length-i-1;j++){
+                if(datas[j] >= datas[j+1]){
+                    int t = datas[j];
+                    datas[j] = datas[j+1];
+                    datas[j+1] = t;
                 }
             }
-//            if (swapFlag) {
-//                return datas;
-//            }
         }
         return datas;
     }

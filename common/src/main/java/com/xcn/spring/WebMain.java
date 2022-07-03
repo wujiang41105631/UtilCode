@@ -1,5 +1,6 @@
 package com.xcn.spring;
 
+import com.xcn.spring.annotation.config.Config;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -24,7 +25,7 @@ public class WebMain implements WebApplicationInitializer{
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-        ctx.register(com.xcn.spring.annotation.config.Config.class);
+        ctx.register(Config.class);
         ctx.setServletContext(servletContext);
         ServletRegistration.Dynamic dynamic = servletContext.addServlet("dispatcher",new DispatcherServlet(ctx));
         dynamic.addMapping("/");

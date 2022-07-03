@@ -1,0 +1,58 @@
+给定一个Node，clone之
+Node
+	val:
+	next:
+	rand （指向其他节点的一个随即值）:
+
+
+public static Node clone(Node dataSource){
+	if(node == null){
+		return null;
+	}
+
+	Map<Node,Node> nodeCopy = new HashMap();
+	Node head = dataSource;
+	while(head != null){
+       nodeCopy.put(head,new Node(head.val));
+       head = head.next;
+	}
+
+	head = dataSource;
+
+	while(head != null){
+		nodeCopy.get(head).next = nodeCopy.get(nodeCopy.get(head.next));
+		nodeCopy.get(head).rand = nodeCopy.get(nodeCopy.get(head.rand));
+		head = head.next;
+	}
+
+	return nodeCopy.get(dataSource);
+}
+
+public static Node clone(Node dataSource){
+	if(node == null){
+		return null;
+	}
+
+	Node head = dataSource;
+	while(head!= null){
+	    Node next = head.next;
+		head.next = new Node(head.val);
+		head.next.next = next;
+		head = head.next.next;
+	}
+
+	head = dataSource;
+	while(head != null){
+		head.next.rand = head.rand == null? null : head.rand.next;
+		head = head.next.next;
+	}
+	head = dataSource;
+	Node result = dataSource.next;
+	Node t = dataSource.next;
+	while(head != null){
+		head.next = head.next.next;
+		result.next =result.next.next;
+		head = head.next;
+	}
+	return t;
+}

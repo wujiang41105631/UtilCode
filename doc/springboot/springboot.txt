@@ -1,0 +1,22 @@
+1. 1. 装配：
+    1.1  自动装配配置
+            1. 先扫描： 得到@Configuration的配置类。自己定义的配置类
+            2. 再得到 @EnableAutoConfiguration中@Import内配置的 AutoConfigurationImportSelector 类 的selectImports方法
+
+
+2、 @Configuration(proxyMethodBean=true|false)proxyMethodBean default 值为true： 保证该类中所有的@Bean对象为单利对象，如果值为false。则该类中所有的@Bean对象为多例对象。为了解决组件依赖的问题
+3. @Import(AAA.class) 默认组件的名字就是全类名, @CompomentScan
+4. @Conditional
+5. @ImportSource("classpath:beans.xml")
+6. 配置绑定[默认和springboot的配置文件： application.properties 文件相关] 两种方式：
+   1>   ConfigurationProperty(prefix="")，需要和@Compoment 注解配合使用
+   2>   @EnableConfigurationProperties(XXXX.class)  和 @ConfigurationProperty(prefix="") 配合
+------------------------------------------------------------------------------------------------------------------------
+1. SpringBootApplication  注解：
+    1> CompomentScan
+    2> SpringBootConfiguration：合并了 @Compoment
+    3> EnableAutoConfiguration
+        3.1 @AutoConfigurationPackage 主要作用是启动我们自己写的包下的类的配置的加载
+               ---@Import(AutoConfigurationPackages.Registrar.class) 批量注册 ，把启动类所对应的包下的所有组件注册进去
+        3.2 @Import(AutoConfigurationImportSelector.class) -- 加载spring.factories 文件下的东西
+               利用getAutoConfigurationEntry来 导入组件 此处会导入很多的AutoConfigration类

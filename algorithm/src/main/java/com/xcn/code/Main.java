@@ -7,7 +7,6 @@ package com.xcn.code;
  **/
 public class Main {
 
-
     public static String addString(String s1, String s2) {
         if (s1 == null && s2 == null) {
             return null;

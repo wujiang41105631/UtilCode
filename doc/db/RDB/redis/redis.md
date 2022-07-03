@@ -33,7 +33,7 @@ RDB存在哪些优势呢？
 4). 相比于AOF机制，如果数据集很大，RDB的启动效率会更高。
 RDB又存在哪些劣势呢？
 1). 如果你想保证数据的高可用性，即最大限度的避免数据丢失，那么RDB将不是一个很好的选择。因为系统一旦在定时持久化之前出现宕机现象，此前没有来得及写入磁盘的数据都将丢失。
-2). 由于RDB是通过fork子进程来协助完成数据持久化工作的，因此，如果当数据集较大时，可能会导致整个服务器停止服务几百毫秒，甚至是1秒钟。
+2). RDB方式数据没办法做到实时持久化/秒级持久化。由于RDB是通过fork子进程来协助完成数据持久化工作的，因此，如果当数据集较大时，可能会导致整个服务器停止服务几百毫秒，甚至是1秒钟。
 AOF的优势有哪些呢？
 1). 该机制可以带来更高的数据安全性，即数据持久性。Redis中提供了3中同步策略，即每秒同步、每修改同步和不同步。事实上，每秒同步也是异步完成的，其效率也是非常高的，所差的是一旦系统出现宕机现象，那么这一秒钟之内修改的数据将会丢失。而每修改同步，我们可以将其视为同步持久化，即每次发生的数据变化都会被立即记录到磁盘中。可以预见，这种方式在效率上是最低的。至于无同步，无需多言，我想大家都能正确的理解它。
 2). 由于该机制对日志文件的写入操作采用的是append模式，因此在写入过程中即使出现宕机现象，也不会破坏日志文件中已经存在的内容。然而如果我们本次操作只是写入了一半数据就出现了系统崩溃问题，不用担心，在Redis下一次启动之前，我们可以通过redis-check-aof工具来帮助我们解决数据一致性的问题。
@@ -61,7 +61,10 @@ appendfsync everysec  #每秒钟同步一次，该策略为AOF的缺省策略。
 appendfsync no          #从不同步。高效但是数据不会被持久化。
 
 5. redis io模型
+    redis基于Reactor模式开发了自己的网络事件处理器，称之为文件事件处理器(File Event Hanlder)。文件事件处理器由Socket、IO多路复用程序、文件事件分派器(dispather)，事件处理器(handler)四部分组成。
     redis采用的是多路复用IO模型，单执行线程，多IO线程。然后采用epoll来实现。
+    单线程是指：网络IO和 数据的读写用的是一个线程。
+    redis的多线程是指： 网络数据的解析变成了多线程，但是数据的读写依然是单线程。
     epoll有诸多优点：
      1. epoll 没有最大并发连接的限制，上限是最大可以打开文件的数目，这个数字一般远大于 2048, 
      一般来说这个数目和系统内存关系很大，具体数目可以 cat /proc/sys/fs/file-max 察看。
@@ -78,5 +81,7 @@ appendfsync no          #从不同步。高效但是数据不会被持久化。
      详见https://blog.csdn.net/dl674756321/article/details/105411034?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.channel_param
          https://blog.csdn.net/wxy941011/article/details/80274233?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param
 
-
+Redis 6.0 之前的版本真的是单线程吗?
+       Redis基于Reactor模式开发了网络事件处理器，
+       这个处理器被称为文件事件处理器。它的组成结构为4部分：多个套接字、IO多路复用程序、文件事件分派器、事件处理器。因为文件事件分派器队列的消费是单线程的，所以Redis才叫单线程模型。
 

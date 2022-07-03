@@ -1,5 +1,6 @@
 package com.xcn.spring;
 
+import com.xcn.spring.annotation.config.Config;
 import com.xcn.spring.annotation.fg.FgHelloWordService;
 import com.xcn.spring.annotation.service.HelloService;
 import com.xcn.spring.javaconfig.fg.FgHelloWordService2;
@@ -22,7 +23,7 @@ public class Main {
     static {
         switch (runType) {
             case ANNOTATION:
-                context = new AnnotationConfigApplicationContext(com.xcn.spring.annotation.config.Config.class);
+                context = new AnnotationConfigApplicationContext(Config.class);
                 break;
             case JAVACONFIG:
                 context = new AnnotationConfigApplicationContext(com.xcn.spring.javaconfig.config.Config.class);

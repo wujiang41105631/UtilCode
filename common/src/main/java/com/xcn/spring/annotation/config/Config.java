@@ -1,8 +1,10 @@
 package com.xcn.spring.annotation.config;
 
 import org.omg.CORBA.Environment;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,18 +20,18 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @Configuration // 声明此类是一个配置类
 @EnableAspectJAutoProxy // 注解方式设置aop
-@PropertySource("classpath:common.properties")
+//@PropertySource("classpath:common.properties")
 @EnableAsync
 @EnableScheduling
 //@Profile("dev")
 @ComponentScan("com.xcn.spring.annotation")
 public class Config {
-    @Value("#{systemProperties['username']}")
-    public String dbUserName;
-    @Value("#{systemProperties['password']}")
-    public String dbPassword;
-    @Value("testUrl")
-    public String dbUrl;
+//    @Value("#{systemProperties['username']}")
+//    public String dbUserName;
+//    @Value("#{systemProperties['password']}")
+//    public String dbPassword;
+//    @Value("testUrl")
+//    public String dbUrl;
 
     private Environment environment;
 

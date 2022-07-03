@@ -10,6 +10,21 @@ import com.xcn.code.sort.AbstractSortAlgorithm;
  * @description
  */
 public class DuiSortAlgorithm extends AbstractSortAlgorithm {
+
+    /**
+     * 题目：
+     * 1. 已知一个几乎有序的数组（几乎有序是指，如果把数组排好顺序的话，每个元素移动的距离一定不会超过K，并且k小对于数组来说是比较小的），请选择一个合适的策略排序。
+     *    解法： 给定一个大小为K的小根堆，挨个放就好了
+     * @param datas
+     * @return
+     */
+
+
+
+
+
+
+
     @Override
     protected int[] process(int[] datas) {
         //1.构建大顶堆

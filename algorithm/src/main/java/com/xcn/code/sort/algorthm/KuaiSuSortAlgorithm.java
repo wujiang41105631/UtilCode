@@ -12,12 +12,13 @@ import com.xcn.code.sort.AbstractSortAlgorithm;
 public class KuaiSuSortAlgorithm extends AbstractSortAlgorithm {
     @Override
     protected int[] process(int[] datas) {
-        quickSort_2(datas, 0, datas.length - 1);
+        quickSort_1(datas, 0, datas.length - 1);
         return datas;
     }
 
 
     public void quickSort_1(int[] data, int start, int end) {
+
         if (data == null || start < 0 || end > data.length - 1) {
             throw new IllegalArgumentException("Invalid Parameters");
         }
