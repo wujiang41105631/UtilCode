@@ -2,7 +2,11 @@
     1.1  自动装配配置
             1. 先扫描： 得到@Configuration的配置类。自己定义的配置类
             2. 再得到 @EnableAutoConfiguration中@Import内配置的 AutoConfigurationImportSelector 类 的selectImports方法
-
+            3. 先加载所有的自动配置类
+            4. 每个自动配置类按条件进行生效
+            5. 生效的配置类就会给容器中装配很多组件[会有一坨配置文件, 例如HttpEncodingAutoConfiguration 中的ServerProperties]
+            6. 只要容器中有这写组件，相当于这些功能就有了
+            7，如果用户配置了，则用户配置的优先
 
 2、 @Configuration(proxyMethodBean=true|false)proxyMethodBean default 值为true： 保证该类中所有的@Bean对象为单利对象，如果值为false。则该类中所有的@Bean对象为多例对象。为了解决组件依赖的问题
 3. @Import(AAA.class) 默认组件的名字就是全类名, @CompomentScan
@@ -20,3 +24,38 @@
                ---@Import(AutoConfigurationPackages.Registrar.class) 批量注册 ，把启动类所对应的包下的所有组件注册进去
         3.2 @Import(AutoConfigurationImportSelector.class) -- 加载spring.factories 文件下的东西
                利用getAutoConfigurationEntry来 导入组件 此处会导入很多的AutoConfigration类
+
+2.  dev-tools
+     当你改完bug后只需要重新编译代码就可以自动把变更加载进来，其实他的原理仅仅是restart 而已。如果要真正用热部署的话需要付费的东西
+     <dependency>
+        <groupId> org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+        <option>true</option>
+     </dependency>
+3. Spring Initalizr（初始化向导）  : idea中新建 spring boot 项目的工具插件。
+4. spring 的配置文件：
+    YAML: https://blog.csdn.net/qq_40771567/article/details/114934719
+        1> 父子关键通过换行缩进来表示
+        2> 需要注意空格:  key: value  value之前需要有个空格。
+    如果需要自定义的类绑定的属性的提示，则需要添加新的依赖包,无语的是 加载完成后需要先run下项目：
+         <dependency>
+            <groupId> org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <option>true</option>
+         </dependency>
+    同时在插件中，排除这个东西，对功能没有影响，只不过在运行过程中这个东西没啥用。
+     <plugin>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-maven-plugin</artifactId>
+         <version>${spring.boot.version}</version>
+
+         <configuration>
+            <excludes>
+                <exclude>
+                    <groupId> org.springframework.boot</groupId>
+                    <artifactId>spring-boot-configuration-processor</artifactId>
+                </exclude>
+             </excludes>
+         </configuration>
+     </plugin>
+5. spring boot web 开发
