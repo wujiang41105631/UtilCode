@@ -1,3 +1,7 @@
+https://blog.csdn.net/u011863024/article/details/113667634
+https://blog.csdn.net/u011863024/article/details/113667946
+
+
 1. 1. 装配：
     1.1  自动装配配置
             1. 先扫描： 得到@Configuration的配置类。自己定义的配置类
@@ -59,3 +63,5 @@
          </configuration>
      </plugin>
 5. spring boot web 开发
+6. spring-boot 属性配置优先级
+     命令行 (jar ) > 指定环境的配置文件 > 默认文件
