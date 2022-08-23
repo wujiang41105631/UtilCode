@@ -23,7 +23,7 @@ public class Kmp {
 
         char[] s1 = str1.toCharArray();
         char[] s2 = target.toCharArray();
-        int i1 = 9;
+        int i1 = 0;
         int i2 = 0;
         // next 数组
         int[] next = getNextArray(s2);// O(target.length)

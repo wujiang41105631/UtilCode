@@ -77,3 +77,15 @@ Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|au
 12. spring @Configuration
     作用：使类中的@Bean都是单例的
     实现方式：cglib代理
+13. @Import原理
+    AbstractApplicationContext refresh() ->
+    AbstractApplicationContext invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) ->
+    PostProcessorRegistrationDelegate invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) ->
+    //重点就在于ConfigurationClassPostProcessor
+    ConfigurationClassPostProcessor postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) ->
+    ConfigurationClassPostProcessor processConfigBeanDefinitions(BeanDefinitionRegistry registry) ->
+    ConfigurationClassParser parse(Set<BeanDefinitionHolder> configCandidates) ->
+    //这里有三个parse的方法，我们只取其中一个来进行分析
+    ConfigurationClassParser parse(AnnotationMetadata metadata, String beanName) ->
+    ConfigurationClassParser processConfigurationClass(ConfigurationClass configClass) ->
+    ConfigurationClassParser doProcessConfigurationClass(ConfigurationClass configClass, SourceClass sourceClass)

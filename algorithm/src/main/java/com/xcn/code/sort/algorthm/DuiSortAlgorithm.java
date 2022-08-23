@@ -35,7 +35,7 @@ public class DuiSortAlgorithm extends AbstractSortAlgorithm {
         //2.调整堆结构+交换堆顶元素与末尾元素
         for (int j = datas.length - 1; j > 0; j--) {
             swap(datas, 0, j);//将堆顶元素与末尾元素进行交换
-            adjustHeap(datas, 0, j);//重新对堆进行调整
+            adjustHeap (datas, 0, j);//重新对堆进行调整
         }
         return datas;
     }
@@ -49,8 +49,9 @@ public class DuiSortAlgorithm extends AbstractSortAlgorithm {
      * @param length
      */
     public static void adjustHeap(int[] arr, int i, int length) {
+        // 堆用数组表示的话，且首个节点从0开始的话,有一个规律：i位置的节点的左子子节点的位置为 2i+1,右子节点的位置为2i+2，父检点为(k-1)/2
         int temp = arr[i];//先取出当前元素i
-        for (int k = i * 2 + 1; k < length; k = k * 2 + 1) {//从i结点的左子结点开始，也就是2i+1处开始
+        for (int k = i * 2 + 1; k < length; k = k * 2 + 1) {//从i位置结点的左子结点开始，也就是2i+1处开始
             if (k + 1 < length && arr[k] < arr[k + 1]) {//如果左子结点小于右子结点，k指向右子结点
                 k++;
             }
