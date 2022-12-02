@@ -6,11 +6,19 @@ https://blog.csdn.net/u011863024/article/details/113667946
     1.1  自动装配配置
             1. 先扫描： 得到@Configuration的配置类。自己定义的配置类
             2. 再得到 @EnableAutoConfiguration中@Import内配置的 AutoConfigurationImportSelector 类 的selectImports方法
-            3. 先加载所有的自动配置类
+            3. 先加载所有的自动配置类(@Configration)
             4. 每个自动配置类按条件进行生效
             5. 生效的配置类就会给容器中装配很多组件[会有一坨配置文件, 例如HttpEncodingAutoConfiguration 中的ServerProperties]
             6. 只要容器中有这写组件，相当于这些功能就有了
             7，如果用户配置了，则用户配置的优先
+
+
+
+            1）通过注解@SpringBootApplication=>@EnableAutoConfiguration=>@Import({AutoConfigurationImportSelector.class})实现自动装配
+            2）AutoConfigurationImportSelector类中重写了ImportSelector中selectImports方法，批量返回需要装配的配置类
+            3）通过Spring提供的SpringFactoriesLoader机制，扫描classpath下的META-INF/spring.factories文件，读取需要自动装配的配置类
+            4）依据条件筛选的方式，把不符合的配置类移除掉，最终完成自动装配
+
 
 2、 @Configuration(proxyMethodBean=true|false)proxyMethodBean default 值为true： 保证该类中所有的@Bean对象为单利对象，如果值为false。则该类中所有的@Bean对象为多例对象。为了解决组件依赖的问题
 3. @Import(AAA.class) 默认组件的名字就是全类名, @CompomentScan

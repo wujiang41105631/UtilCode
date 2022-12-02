@@ -165,3 +165,16 @@ https://me.csdn.net/iteye_13798
 
 3。 默认 年老代：年轻代 = 2 ：1
     默认 eden : Survivor0:Survivor1=8:1:1
+
+
+4. fullgc触发条件
+    1. 旧生代空间不足
+   2. Permanet Generation空间满
+   4. 统计得到的Minor GC晋升到旧生代的平均大小大于旧生代的剩余空间
+5. 三色标记的问题：
+    浮动垃圾
+    漏标问题
+        CMS: 写屏障+增量更新
+        G1:  写屏障+STAB(snapshot at the begining)
+        ZGC: 读屏障
+    原始快照相比于增量更新来说效率会更高，因为不用在重新标记阶段再去做枚举遍历，但是也就可能会导致有更多的浮动垃圾

@@ -27,6 +27,12 @@
 
 6. BeanFactoryPostProcessor是用来处理修改bean定义信息的后置处理器，这个时候bean还没有初始化，只是定好了BeanDefinition，在BeanFactoryPostProcessor接口的postProcessBeanFactory方法中，我们可以修改bean的定义信息，例如修改属性的值，修改bean的scope为单例或者多例。注意只是用来修改BeanDefination信息，不要getBean。
    BeanPostProcessor则是bean初始化前后对bean的一些操作，意思就是说bean在调用构造之后，初始化方法前后进行一些操作。 在BeanFactoryPostProcessor之后执行
+7. spring aop 和 aspectjAOP 区别
+    spring 使用了aspectJ的注解，
+    springAop 是运行时增强，AspectJ是编译期增强。
+    Spring AOP基于代理(Proxying)，而 AspectJ基于字节码操作(Bytecode Manipulation)。
+    springAOP 简单，但是性能略差
+    如果切面太多的话，建议用aspectJ
 
 --------------------------------------------------   -------------------------
 https://sexycoding.iteye.com/blog/1062372
@@ -89,3 +95,5 @@ Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|au
     ConfigurationClassParser parse(AnnotationMetadata metadata, String beanName) ->
     ConfigurationClassParser processConfigurationClass(ConfigurationClass configClass) ->
     ConfigurationClassParser doProcessConfigurationClass(ConfigurationClass configClass, SourceClass sourceClass)
+
+

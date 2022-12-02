@@ -12,7 +12,7 @@ public class T1 {
     }
 
     /**
-     * 提取出最右侧的1
+     * 提取出最右侧的1Q
      *
      * @param data
      */

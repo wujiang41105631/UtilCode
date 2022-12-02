@@ -1,0 +1,4 @@
+1. mybatis 和 spring 整合
+    SqlSessionFactoryBean的作用：
+           1、解析的配置文件封装到Configuration(mybatis核心)
+           2、指定事务工厂这一步指定spring的事务工厂(主要整合connection)

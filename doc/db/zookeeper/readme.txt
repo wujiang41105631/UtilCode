@@ -22,11 +22,15 @@
     将pk结果发给其他人
     每个服务器自己的投票箱统计leader是否过半
 
+zookeeper 节点类型：
+持久、持久顺序、临时、临时顺序、容器、持久 TTL、持久顺序 TTL。
+
 PERSISTENT 持久型：创建了就会一直存在，直到被手动调用删除节点方法。
 PERSISTENT_SEQUENTIAL 持久顺序型：会自动在节点路径名称后面添加一个自增的序号，如apple/iphone/macbook00000001，这种带自增序号的节点能保证输入同一路径时都能创建一个唯一的节点，可用于实现分布式队列，分布式公平锁。
 EPHEMERAL 临时型:在回话结束后，节点自动删除。
 EPHEMERAL_SEQUENTIAL 临时顺序型临时节点特性，路径自动添加自增序号。
-CONTAINER 容器型:ookeeper会有:TGTL的意思是time to live ，他是容器节点之上的，当此类型节点之下没有子节点且未被修改的时间超过TTL后，就会被删除。要想使用该类型，必须在zookeeper的bin/zkService.sh中的启动zookeeper的java环境中设置环境变量zookeeper.extendedTypesEnabled=true（具体做法在下边），否则KeeperErrorCode = Unimplemented for /**。
+CONTAINER 容器型:容器节点的表现形式和持久节点是一样的，但是区别是 ZK 服务端启动后，会有一个单独的线程去扫描，所有的容器节点，当发现容器节点的子节点数量为 0 时，会自动删除该节点，除此之外和持久节点没有区别
+PERSISTENT_WITH_TTL: zookeeper会有:TGTL的意思是time to live ，他是容器节点之上的，当此类型节点之下没有子节点且未被修改的时间超过TTL后，就会被删除。
 PERSISTENT_SEQUENTIAL_WITH_TTL 持久顺序TTL型.就是持久TTL型加上顺序节点的特性。
 
 
