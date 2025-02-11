@@ -3,6 +3,7 @@ package com.xcn.code;
 import com.xcn.bean.TreeNode;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * 遍历
@@ -21,6 +22,8 @@ public class TreeNodeErgodic {
      * @return
      */
     public ArrayList<Integer> preOrder(TreeNode tree) {
+        ThreadLocal<String> threadLocal = new ThreadLocal<>();
+        threadLocal.set("hh");
         ArrayList<Integer> list = new ArrayList<>();
         Stack<TreeNode> stack = new Stack<>();
         stack.push(tree);
