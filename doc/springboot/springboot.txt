@@ -1,6 +1,7 @@
 https://blog.csdn.net/u011863024/article/details/113667634
 https://blog.csdn.net/u011863024/article/details/113667946
 
+Spring Boot 的诞生是为了解决传统 Spring 开发中配置复杂、依赖繁琐、部署困难等问题 ，通过自动化和约定，让开发者专注于业务逻辑而非基础设施1610。它是现代 Java 企业级应用开发的事实标准框架。
 
 1. 1. 装配：
     1.1  自动装配配置
@@ -18,7 +19,25 @@ https://blog.csdn.net/u011863024/article/details/113667946
             2）AutoConfigurationImportSelector类中重写了ImportSelector中selectImports方法，批量返回需要装配的配置类
             3）通过Spring提供的SpringFactoriesLoader机制，扫描classpath下的META-INF/spring.factories文件，读取需要自动装配的配置类
             4）依据条件筛选的方式，把不符合的配置类移除掉，最终完成自动装配
+    @EnableAutoConfiguration注解通过@SpringBootApplication被间接的标记在了Spring Boot的启动类上。在SpringApplication.run(...)的内部就会执行selectImports()方法，找到所有JavaConfig自动配置类的全限定名对应的class，然后将所有自动配置类加载到Spring容器中。
 
+    @Import 三种使用方式
+        直接导入普通的 Java 类。
+        配合自定义的 ImportSelector 使用。
+        配合 ImportBeanDefinitionRegistrar 使用。
+
+SpringApplication.run(...)方法怎么调到selectImports()方法的
+        加载过程大概是这样的：
+        SpringApplication.run(...)方法  》 
+        AbstractApplicationContext.refresh()方法  》 
+        invokeBeanFactoryPostProcessors(...)方法  》 
+        PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(...) 方法  》
+        #ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(..)方法  》
+        ConfigurationClassPostProcessor.processConfigBeanDefinitions
+        ConfigurationClassParser.parser
+        AutoConfigurationImportSelector.selectImports
+        该方法会找到自动配置的类，并给打了@Bean注解的方法创建对象。
+        postProcessBeanDefinitionRegistry 方法是最核心的方法，它负责解析@Configuration、@Import、@ImportSource、@Component、@ComponentScan、@Bean等，完成bean的自动配置功能。
 
 2、 @Configuration(proxyMethodBean=true|false)proxyMethodBean default 值为true： 保证该类中所有的@Bean对象为单利对象，如果值为false。则该类中所有的@Bean对象为多例对象。为了解决组件依赖的问题
 3. @Import(AAA.class) 默认组件的名字就是全类名, @CompomentScan
@@ -36,6 +55,10 @@ https://blog.csdn.net/u011863024/article/details/113667946
                ---@Import(AutoConfigurationPackages.Registrar.class) 批量注册 ，把启动类所对应的包下的所有组件注册进去
         3.2 @Import(AutoConfigurationImportSelector.class) -- 加载spring.factories 文件下的东西
                利用getAutoConfigurationEntry来 导入组件 此处会导入很多的AutoConfigration类
+        springboot自动装配的核心注解@lmport
+            参数如果是普通类将该类实例化交给IOC容器管理
+            参数如果是ImportBeanDefinitionRegistrar的实现类,支持手工注bean
+            参数如果是ImportSelector的实现类,注册selectlinports返回的数组(类全路径)到IOC容器批量注册
 
 2.  dev-tools
      当你改完bug后只需要重新编译代码就可以自动把变更加载进来，其实他的原理仅仅是restart 而已。如果要真正用热部署的话需要付费的东西

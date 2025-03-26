@@ -95,5 +95,8 @@ Spring中开启aspectJ: <context: load-time-weaver/> aspectj-weaving = on|off|au
     ConfigurationClassParser parse(AnnotationMetadata metadata, String beanName) ->
     ConfigurationClassParser processConfigurationClass(ConfigurationClass configClass) ->
     ConfigurationClassParser doProcessConfigurationClass(ConfigurationClass configClass, SourceClass sourceClass)
-
+14.spring 三级缓存：
+  1级：singletonObjects：最终bean的缓存
+  2级：earlySingletonObjects：用来解决多个循环依赖，且不能让他们都创建一个新bean。例如 A和B循环依赖，A和C循环依赖。
+  3级：singletonFactories 缓存的是一个Factory对象 ObjectFactory
 

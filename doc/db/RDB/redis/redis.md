@@ -3,9 +3,11 @@
 1. volatile-lru[Least Recently Used]：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰 
 2. volatile-ttl[Time To Live]：从已设置过期时间的数据集（server.db[i].expires）中挑选马上将要过期的数据淘汰 
 3. volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰 
-4. allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰 
-5. allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰 
-6. no-enviction（驱逐）：禁止驱逐数据
+4. volatile-lfu: 从所有设置了到期时间的 Key 中，淘汰最近最不常用使用的 Key
+5. allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰 【最近最不长使用]
+6. allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰 
+7. volatile-lfu: 从所有 Key 中，淘汰最近最不常用使用的 Key
+8. no-enviction（驱逐）：禁止驱逐数据
 
 Redis 服务其使用的是 惰性删除 和 定期删除 两种策略，通过配合使用这两种删除策略，服务其可以很好的合理利用CPU时间和避免浪费内存空间之间取得平衡。
     1. 惰性删除
